@@ -15,8 +15,8 @@ public class Comment {
     @Column(name = "commentId", nullable = false)
     private Integer id;
 
-    @Column(name = "t", nullable = false, length = 10000)
-    private String t;
+    @Column(name = "comment_text", nullable = false, length = 10000)
+    private String comment_text;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
