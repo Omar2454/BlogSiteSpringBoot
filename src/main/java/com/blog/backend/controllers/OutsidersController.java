@@ -21,6 +21,7 @@ public class OutsidersController {
     private final AuthenticationService authenticationService;
 
 
+
     private static final Logger logger = LoggerFactory.getLogger(OutsidersController.class);
 
 

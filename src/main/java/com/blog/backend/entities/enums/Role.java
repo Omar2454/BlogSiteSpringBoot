@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import static com.blog.backend.entities.enums.Permissions.*;
 
 
+@Getter
 @RequiredArgsConstructor
 public enum Role {
     USER(
@@ -36,7 +37,6 @@ public enum Role {
     )
     ;
 
-    @Getter
     private final Set<Permissions> permissions;
 
     public List<SimpleGrantedAuthority> getAuthorities(){

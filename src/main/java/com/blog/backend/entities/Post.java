@@ -1,9 +1,12 @@
 package com.blog.backend.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -34,13 +37,16 @@ public class Post {
     private String imageBase;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)//"user_id" is the primary key of table users
-    @JsonBackReference //Back reference from (foreign key) to "user_id" that's inside "users" table
-    private User user; //foreign key from table "users"
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonBackReference
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")//foreign key from table "users"
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
@@ -48,9 +54,6 @@ public class Post {
     @OneToMany(mappedBy = "post")
     @JsonManagedReference
     private Set<Comment> comments = new LinkedHashSet<>();
-
-
-
 
 
 

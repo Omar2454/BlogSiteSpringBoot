@@ -1,8 +1,11 @@
 package com.blog.backend.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
 
@@ -23,18 +26,23 @@ public class Comment {
     private String comment_text;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)//"user_id" is the primary key of table users
-    @JsonBackReference //Back reference from (foreign key) to "user_id" that's inside "users" table
-    private User user; //foreign key from table "users"
+    @JoinColumn(name = "user_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonBackReference
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "post_id", nullable = false)//"post_id" is the primary key of table posts
-    @JsonBackReference //Back reference from (foreign key) to "post_id" that's inside posts table
-    private Post post;// foreign key from table "posts"
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "post_id", nullable = false)
+    @JsonBackReference
+    private Post post;
 
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
