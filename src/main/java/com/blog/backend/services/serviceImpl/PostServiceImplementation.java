@@ -12,10 +12,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -40,9 +43,14 @@ public class PostServiceImplementation implements PostService {
     }
 
     @Override
-    public void deletePost(Integer postId) {
-        postRepository.findById(postId).orElseThrow(() -> new EntityNotFoundException("Post ID not Found"));
-     postRepository.deleteById(postId);
+    public ResponseEntity<String> deletePost(Integer postId) {
+         Optional<Post> post = postRepository.findById(postId);
+         if(post.isEmpty()){
+             return  new ResponseEntity<>("Post ID not found" , HttpStatus.BAD_REQUEST);
+         }else{
+             postRepository.deleteById(postId);
+return new ResponseEntity<>("Post Deleted Successfully" , HttpStatus.OK);
+         }
     }
 
     @Override
@@ -59,10 +67,24 @@ public class PostServiceImplementation implements PostService {
     }
 
     @Override
-    public Post getSpecificPost(Integer postId) {
-        postRepository.findById(postId).orElseThrow(() -> new EntityNotFoundException("Post Not Found"));
-        return postRepository.getReferenceById(postId);
+    public Optional<Post> getPostByPostId(Integer postId) {
+        return postRepository.findById(postId);
+
     }
+
+    public List<Post> getAllPostByUserId(Integer userId){
+        return postRepository.findAllByUserId(userId);
+    }
+
+
+    //TODO get all post
+    @Override
+    public List<Post> getAllPosts() {
+        return postRepository.findAll();
+    }
+
+
+
 
 
 }

@@ -30,10 +30,11 @@ public class Post {
     @Column(name = "post_description", length = 10000)
     private String postDescription;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
-    @JsonBackReference
-    private User user;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)//"user_id" is the primary key of table users
+    @JsonBackReference //Back reference from (foreign key) to "user_id" that's inside "users" table
+    private User user; //foreign key from table "users"
+
 
     @OneToMany(mappedBy = "post")
     @JsonManagedReference

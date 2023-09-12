@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/blog")
@@ -26,9 +27,7 @@ public class PostController {
     //check
     @DeleteMapping("delete/post/{post-id}")
     public ResponseEntity<String> deletePost(@PathVariable("post-id") Integer postId){
-        postService.deletePost(postId);
-        return new ResponseEntity<>("Deleted Successfully", HttpStatus.OK);
-
+           return postService.deletePost(postId);
     }
 
     //check
@@ -37,10 +36,23 @@ public class PostController {
         return postService.updatePost(postId,newPostDTO);
     }
 
-    //check
-    @GetMapping("get/post/{post-id}")
-   public Post getSpecificPost(@PathVariable("post-id") Integer postId){
-        return postService.getSpecificPost(postId);
+
+    @GetMapping("get/postByPostId/{post-id}")
+   public Optional<Post> getPostByPostId(@PathVariable("post-id") Integer postId){
+        return postService.getPostByPostId(postId);
+    }
+
+    @GetMapping("get/postByUserId/{user-id}")
+    public List<Post> getPostByUserId(@PathVariable("user-id") Integer userId){
+        return postService.getAllPostByUserId(userId);
+    }
+
+
+
+
+    @GetMapping("get/post/all")
+    public List<Post> getAllPost(){
+        return postService.getAllPosts();
     }
 
 }

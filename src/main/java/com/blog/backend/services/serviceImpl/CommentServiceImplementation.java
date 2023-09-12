@@ -12,10 +12,13 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -41,10 +44,16 @@ public class CommentServiceImplementation implements CommentService {
     }
 
     @Override
-    public void deleteComment(Integer commentId) {
+    public ResponseEntity<String> deleteComment(Integer commentId) {
         //find Comment by its ID
-        commentRepository.findById(commentId).orElseThrow(() -> new EntityNotFoundException("Comment ID not found"));
-        commentRepository.deleteById(commentId);
+       Optional<Comment> comment =  commentRepository.findById(commentId);
+       if(comment.isEmpty()){
+           return  new ResponseEntity<>("Comment ID not found" , HttpStatus.BAD_REQUEST);
+       }else{
+           commentRepository.deleteById(commentId);
+           return  new ResponseEntity<>("Comment delete Successful" , HttpStatus.OK);
+       }
+
     }
 
     @Override
@@ -60,9 +69,19 @@ public class CommentServiceImplementation implements CommentService {
 
     @Override
     public Comment getSpecificComment(Integer commentId) {
-        commentRepository.findById(commentId).orElseThrow(() -> new EntityNotFoundException("Comment are not Found"));
-        return commentRepository.getReferenceById(commentId);
+       return commentRepository.findById(commentId).orElseThrow(() -> new EntityNotFoundException("Comment are not Found"));
     }
+
+    @Override
+    public List<Comment> getAllComment() {
+        return commentRepository.findAll();
+    }
+
+    //TODO get all comment
+
+
+
+
 
 
 }

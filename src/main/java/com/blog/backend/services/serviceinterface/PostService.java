@@ -2,17 +2,25 @@ package com.blog.backend.services.serviceinterface;
 
 import com.blog.backend.controllers.DTOs.PostDTO;
 import com.blog.backend.entities.Post;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PostService {
 
    Post addPost(PostDTO postDTO);
 
-   void deletePost(Integer postId);
+   ResponseEntity<String> deletePost(Integer postId);
 
    Post updatePost(Integer postId , PostDTO newPostDTO);
 
-   Post getSpecificPost(Integer postId);
+   Optional<Post> getPostByPostId(Integer postId);
+
+
+   List<Post> getAllPosts();
+
+
+   List<Post> getAllPostByUserId(Integer userId);
 
 }

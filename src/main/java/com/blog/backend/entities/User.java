@@ -12,6 +12,9 @@ import java.util.Set;
 @Setter
 @Entity
 @Builder
+//(that help me to use DTO) and
+// (send and retrieve its data from/to API)
+// we (retrieve part of data that essential to frontend)
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "users")
@@ -34,11 +37,11 @@ public class User {
     private String password;
 
     @OneToMany(mappedBy = "user")
-    @JsonManagedReference
+    @JsonManagedReference //(primary key)
     private Set<Comment> comments = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "user")
-    @JsonManagedReference
+    @JsonManagedReference//(primary key)
     private Set<Post> posts = new LinkedHashSet<>();
 
     @Column(name = "created_at")

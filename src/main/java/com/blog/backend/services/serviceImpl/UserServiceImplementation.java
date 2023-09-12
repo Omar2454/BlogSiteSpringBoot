@@ -11,10 +11,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -41,9 +44,13 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
-    public void deleteUser(Integer userId) {
-        userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User ID Not Found"));
-        userRepository.deleteById(userId);
+    public ResponseEntity<String> deleteUser(Integer userId) {
+        Optional<User> user =userRepository.findById(userId);
+        if (user.isEmpty()){
+            return new ResponseEntity<>("User ID not found" , HttpStatus.BAD_REQUEST);
+        }else {
+            userRepository.deleteById(userId);
+            return new ResponseEntity<>("User deleted successfully" , HttpStatus.OK);        }
     }
 
     @Override
@@ -61,10 +68,10 @@ public class UserServiceImplementation implements UserService {
 
     @Override
     public User getSpecificUser(Integer userId) {
-        userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User is not Found"));
-        return userRepository.getReferenceById(userId);
+       return userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User is not Found"));
     }
 
+    //TODO get all user
     @Override
     public List<User> getAllUser() {
         return userRepository.findAll();
