@@ -14,7 +14,7 @@ import java.util.Set;
 public class PostDTO {
     String postTitle;
     String postDescription;
-    String postUrl;
+    String imgUrl;
     //foreign
     int userId;
 }

@@ -21,7 +21,7 @@ import static org.springframework.http.HttpMethod.*;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-@EnableMethodSecurity
+//@EnableMethodSecurity
 public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
@@ -34,15 +34,13 @@ public class SecurityConfig {
 
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/outsiders/authenticate","/api/outsiders/register").permitAll()
+                        .requestMatchers("/api/outsiders/authenticate","/api/outsiders/register","/api/**").permitAll()
 //                        .requestMatchers("/api/admin/**").hasRole(Role.ADMIN.name())
 //                        .requestMatchers(GET,"/api/admin/**").hasAnyAuthority(ADMIN_READ.name())
 //                        .requestMatchers(PUT,"/api/admin/**").hasAnyAuthority(ADMIN_UPDATE.name())
 //                        .requestMatchers(POST,"/api/admin/**").hasAnyAuthority(ADMIN_CREATE.name())
 //                        .requestMatchers(DELETE,"/api/admin/**").hasAnyAuthority(ADMIN_DELETE.name())
 
-                        .anyRequest()
-                        .authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)

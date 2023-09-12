@@ -34,7 +34,7 @@ public class PostServiceImplementation implements PostService {
         Post post =  Post.builder()
                 .postTitle(postDTO.getPostTitle())
                 .postDescription(postDTO.getPostDescription())
-                .postUrl(postDTO.getPostUrl())
+                .imageBase(postDTO.getImgUrl())
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .user(user)
@@ -60,7 +60,7 @@ return new ResponseEntity<>("Post Deleted Successfully" , HttpStatus.OK);
         //update (PostDTO)
         post.setPostTitle(newPostDTO.getPostTitle());
         post.setPostDescription(newPostDTO.getPostDescription());
-        post.setPostUrl(newPostDTO.getPostUrl());
+        post.setImageBase(newPostDTO.getImgUrl());
         post.setUpdatedAt(LocalDateTime.now());
 
         return postRepository.saveAndFlush(post);

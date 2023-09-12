@@ -21,7 +21,7 @@ import java.util.Set;
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "postId", nullable = false)
+    @Column(name = "post_id", nullable = false)
     private Integer id;
 
     @Column(name = "post_title", length = 1000)
@@ -30,25 +30,29 @@ public class Post {
     @Column(name = "post_description", length = 10000)
     private String postDescription;
 
+    @Column(name = "image_base")
+    private String imageBase;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)//"user_id" is the primary key of table users
     @JsonBackReference //Back reference from (foreign key) to "user_id" that's inside "users" table
     private User user; //foreign key from table "users"
-
-
-    @OneToMany(mappedBy = "post")
-    @JsonManagedReference
-    private Set<Comment> comments = new LinkedHashSet<>();
-
-    @Column(name = "post_url")
-    private String postUrl;
-
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+
+    @OneToMany(mappedBy = "post")
+    @JsonManagedReference
+    private Set<Comment> comments = new LinkedHashSet<>();
+
+
+
+
+
 
 
 }

@@ -1,6 +1,7 @@
 package com.blog.backend.entities;
 
 import com.blog.backend.entities.enums.Role;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -49,21 +50,31 @@ public class User implements UserDetails {
     @JsonProperty("roles")
     private Role roles;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "user")
-    @JsonManagedReference //(primary key)
+    @JsonManagedReference
     private Set<Comment> comments = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "user")
-    @JsonManagedReference//(primary key)
+    @JsonManagedReference
     private Set<Post> posts = new LinkedHashSet<>();
 
 
+    @OneToMany(mappedBy = "userID1")
+    @JsonManagedReference
+    private Set<Friendship> friendships1;
+
+    @OneToMany(mappedBy = "userID2")
+    @JsonManagedReference
+    @JsonIgnore
+    private Set<Friendship> friendships2;
 
     @Override
     @JsonIgnore
@@ -72,26 +83,31 @@ public class User implements UserDetails {
     }
 
     @Override
+    @JsonIgnore
     public String getUsername() {
         return this.email;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isEnabled() {
         return true;
 
