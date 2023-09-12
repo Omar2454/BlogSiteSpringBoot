@@ -1,6 +1,5 @@
 package com.blog.backend.controllers.DTOs;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,12 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDTO {
-    private String firstName;
-    private String lastName;
-    private String password;
+public class AuthenticationRequest {
     private String email;
-
-
-
+    private String password;
 }
