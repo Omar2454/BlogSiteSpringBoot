@@ -3,14 +3,19 @@ package com.blog.backend.entities;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "posts")
 public class Post {
@@ -26,13 +31,24 @@ public class Post {
     private String postDescription;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
-    @JsonBackReference
-    private User user;
+    @JoinColumn(name = "user_id", nullable = false)//"user_id" is the primary key of table users
+    @JsonBackReference //Back reference from (foreign key) to "user_id" that's inside "users" table
+    private User user; //foreign key from table "users"
+
 
     @OneToMany(mappedBy = "post")
     @JsonManagedReference
-
     private Set<Comment> comments = new LinkedHashSet<>();
+
+    @Column(name = "post_url")
+    private String postUrl;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
 
 }
