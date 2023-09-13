@@ -1,8 +1,10 @@
 package com.blog.backend.entities;
 
+import com.blog.backend.Serializers.TestSerializer;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
@@ -56,6 +58,9 @@ public class Post {
     private Set<Comment> comments = new LinkedHashSet<>();
 
 
-
+    @OneToMany(mappedBy = "post")
+    @JsonManagedReference
+    @JsonSerialize(using = TestSerializer.class)
+    private Set<React> reacts = new LinkedHashSet<>();
 
 }

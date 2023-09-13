@@ -35,6 +35,7 @@ public class Friendship {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonBackReference
     private User userID2;
+
     @Column(name = "friend_id")
     private Integer friendId;
 
