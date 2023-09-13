@@ -57,7 +57,7 @@ public class UserController {
 
 
 
-    @GetMapping("get/user/all")
+    @GetMapping("get/all")
     public ResponseEntity<Page<User>> getAllUser(Pageable pageable) {
         Page<User> users = userService.getAllUser(pageable);
         return new ResponseEntity<>(users, HttpStatus.OK);
@@ -81,8 +81,5 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
         }
     }
-
-
-
 }
 
