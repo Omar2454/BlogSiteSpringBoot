@@ -7,4 +7,5 @@ public interface FriendshipInterface {
     ResponseEntity<String> acceptOrDeclineFriendRequest(Integer sender, Integer receiver, boolean decision);
 
 
+    ResponseEntity<String> removeFriend(Integer remover, Integer gettingRemoved);
 }

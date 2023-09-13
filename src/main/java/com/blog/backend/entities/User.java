@@ -42,6 +42,7 @@ public class User implements UserDetails {
     private String email;
 
     @Column(name = "password", nullable = false, length = 100)
+    @JsonIgnore
     private String password;
 
 
