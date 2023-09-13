@@ -12,26 +12,26 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("api/blog")
+@RequestMapping("api/blog/post")
 public class PostController {
 
     @Autowired
     private PostService postService;
 
     //check
-    @PostMapping("add/post")
+    @PostMapping("add")
     public Post addPost(@RequestBody PostDTO postDTO){
        return postService.addPost(postDTO);
 
     }
     //check
-    @DeleteMapping("delete/post/{post-id}")
+    @DeleteMapping("delete/{post-id}")
     public ResponseEntity<String> deletePost(@PathVariable("post-id") Integer postId){
            return postService.deletePost(postId);
     }
 
     //check
-    @PutMapping("update/post/{post-id}")
+    @PutMapping("update/{post-id}")
    public Post updatePost(@PathVariable("post-id") Integer postId ,@RequestBody PostDTO newPostDTO){
         return postService.updatePost(postId,newPostDTO);
     }
@@ -50,7 +50,7 @@ public class PostController {
 
 
 
-    @GetMapping("get/post/all")
+    @GetMapping("get/all")
     public List<Post> getAllPost(){
         return postService.getAllPosts();
     }

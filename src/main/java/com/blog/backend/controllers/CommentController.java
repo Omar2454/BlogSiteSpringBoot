@@ -13,19 +13,19 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/blog")
+@RequestMapping("/api/blog/comment")
 public class CommentController {
     @Autowired
     private CommentService commentService;
 
     //check
-    @PostMapping("add/comment")
+    @PostMapping("add")
     public Comment addComment(@RequestBody CommentDTO commentDTO){
          return commentService.addComment(commentDTO);
     }
 
     //check
-    @DeleteMapping("delete/comment/{comment-id}")
+    @DeleteMapping("delete/{comment-id}")
     public ResponseEntity<String> deleteComment(@PathVariable("comment-id") Integer commentId){
 return commentService.deleteComment(commentId);
 
@@ -33,19 +33,19 @@ return commentService.deleteComment(commentId);
 
 
     //check
-    @PutMapping("update/comment/{comment-id}")
+    @PutMapping("update/{comment-id}")
     public  Comment updateComment(@PathVariable("comment-id") Integer commentId ,@RequestBody CommentDTO newCommentDTO){
         return commentService.updateComment(commentId,newCommentDTO);
 
     }
 
     //check
-    @GetMapping("get/comment/{comment-id}")
+    @GetMapping("get/{comment-id}")
     public Comment getSpecificComment(@PathVariable("comment-id") Integer commentId){
        return commentService.getSpecificComment(commentId);
     }
 
-    @GetMapping("get/comment/all")
+    @GetMapping("get/all")
     public List<Comment> getAllComment(){
         return commentService.getAllComment();
     }
