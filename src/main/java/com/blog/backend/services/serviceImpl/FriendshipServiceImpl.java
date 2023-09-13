@@ -5,7 +5,7 @@ import com.blog.backend.entities.Friendship;
 import com.blog.backend.entities.User;
 import com.blog.backend.repos.FriendshipRepository;
 import com.blog.backend.repos.UserRepository;
-import com.blog.backend.services.serviceinterface.FriendshipInterface;
+import com.blog.backend.services.serviceInterface.FriendshipInterface;
 import com.blog.backend.utils.BlogUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
