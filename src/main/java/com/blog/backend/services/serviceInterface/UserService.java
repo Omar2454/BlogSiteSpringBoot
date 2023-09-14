@@ -1,6 +1,7 @@
 package com.blog.backend.services.serviceInterface;
 
 import com.blog.backend.controllers.DTOs.UserDTO;
+import com.blog.backend.controllers.exceptions.GeneralException;
 import com.blog.backend.entities.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,14 +11,14 @@ import java.util.List;
 
 public interface UserService {
 
-    User addUser(UserDTO userDTO);
-    ResponseEntity<String> deleteUser(Integer userId);
 
-    User updateUser(Integer userId , UserDTO newUserDTO);
+    ResponseEntity<?> deleteUser(Integer userId) throws GeneralException;
 
-    User getSpecificUser(Integer userId);
+    ResponseEntity<?> updateUser(Integer userId , UserDTO newUserDTO) throws GeneralException;
 
-    Page<User> getAllUser(Pageable pageable);
+    User getSpecificUser(Integer userId) throws GeneralException;
 
-    ResponseEntity<?> getAllFriends(Integer userId,int page,int size);
+    Page<User> getAllUser(Pageable pageable) throws GeneralException;
+
+    ResponseEntity<?> getAllFriends(Integer userId,Pageable pageable) throws GeneralException;
 }

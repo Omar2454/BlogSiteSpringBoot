@@ -12,7 +12,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,7 +21,8 @@ import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.blog.backend.entities.enums.FriendshipStatus.*;
+import static com.blog.backend.entities.enums.FriendshipStatus.ACCEPTED;
+import static com.blog.backend.entities.enums.FriendshipStatus.PENDING;
 
 
 @Service
@@ -53,8 +53,7 @@ public class FriendshipServiceImpl implements FriendshipInterface {
 
                     List<Friendship> friendships = buildFriendship(Sender, Receiver, sender, receiver);
                     friendshipRepository.saveAll(friendships);
-                    return BlogUtils.getResponseEntity("Friend Request Sent by " + sender.get().getFirstName() + " to " + receiver.get().getFirstName()
-                            , HttpStatus.OK);
+                    return BlogUtils.getResponseEntity("Friend Request Sent by " + sender.get().getFirstName() + " to " + receiver.get().getFirstName(), HttpStatus.OK);
                 }
             }
         } catch (Exception e) {
@@ -66,20 +65,8 @@ public class FriendshipServiceImpl implements FriendshipInterface {
 
     private List<Friendship> buildFriendship(Integer user1Id, Integer user2Id, Optional<User> user1, Optional<User> user2) {
         List<Friendship> friendships = new ArrayList<Friendship>();
-        Friendship friendship1 = Friendship.builder()
-                .userID1(user1.get())
-                .userID2(user2.get())
-                .friendId(user2Id)
-                .requestedAt(LocalDateTime.now())
-                .status(PENDING)
-                .build();
-        Friendship friendship2 = Friendship.builder()
-                .userID1(user2.get())
-                .userID2(user1.get())
-                .friendId(user1Id)
-                .requestedAt(LocalDateTime.now())
-                .status(PENDING)
-                .build();
+        Friendship friendship1 = Friendship.builder().userID1(user1.get()).userID2(user2.get()).friendId(user2Id).requestedAt(LocalDateTime.now()).status(PENDING).build();
+        Friendship friendship2 = Friendship.builder().userID1(user2.get()).userID2(user1.get()).friendId(user1Id).requestedAt(LocalDateTime.now()).status(PENDING).build();
 
         friendships.add(friendship1);
         friendships.add(friendship2);
@@ -111,13 +98,11 @@ public class FriendshipServiceImpl implements FriendshipInterface {
                             friendship2.get().setStatus(ACCEPTED);
                             friendshipRepository.save(friendship1.get());
                             friendshipRepository.save(friendship2.get());
-                            return BlogUtils.getResponseEntity(sender1.get().getFirstName() + "'s Friend Request Accepted By " + receiver1.get().getFirstName()
-                                    , HttpStatus.OK);
+                            return BlogUtils.getResponseEntity(sender1.get().getFirstName() + "'s Friend Request Accepted By " + receiver1.get().getFirstName(), HttpStatus.OK);
                         } else {
                             friendshipRepository.delete(friendship1.get());
                             friendshipRepository.delete(friendship2.get());
-                            return BlogUtils.getResponseEntity(sender1.get().getFirstName() + "'s Friend Request Rejected By " + receiver1.get().getFirstName()
-                                    , HttpStatus.OK);
+                            return BlogUtils.getResponseEntity(sender1.get().getFirstName() + "'s Friend Request Rejected By " + receiver1.get().getFirstName(), HttpStatus.OK);
                         }
                     }
                 }
@@ -145,8 +130,7 @@ public class FriendshipServiceImpl implements FriendshipInterface {
                 } else {
                     friendshipRepository.delete(friendship1.get());
                     friendshipRepository.delete(friendship2.get());
-                    return BlogUtils.getResponseEntity("Friend " + gettingRemoved1.get().getFirstName() + " Removed by " + remover1.get().getFirstName()
-                            , HttpStatus.OK);
+                    return BlogUtils.getResponseEntity("Friend " + gettingRemoved1.get().getFirstName() + " Removed by " + remover1.get().getFirstName(), HttpStatus.OK);
                 }
             }
 

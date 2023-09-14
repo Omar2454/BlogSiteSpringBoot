@@ -21,8 +21,6 @@ import java.util.Set;
 @Setter
 @Entity
 @Builder
-
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "users")

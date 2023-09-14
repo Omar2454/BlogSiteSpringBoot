@@ -1,23 +1,20 @@
 package com.blog.backend.services.serviceImpl;
 
-import com.blog.backend.constants.BlogConstants;
 import com.blog.backend.controllers.DTOs.FriendDTO;
 import com.blog.backend.controllers.DTOs.UserDTO;
+import com.blog.backend.controllers.exceptions.ErrorCode;
+import com.blog.backend.controllers.exceptions.GeneralException;
 import com.blog.backend.entities.Friendship;
 import com.blog.backend.entities.User;
 import com.blog.backend.repos.FriendshipRepository;
 import com.blog.backend.repos.PostRepository;
 import com.blog.backend.repos.UserRepository;
 import com.blog.backend.services.serviceInterface.UserService;
-import com.blog.backend.utils.BlogUtils;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,45 +41,35 @@ public class UserServiceImplementation implements UserService {
     private final PostRepository postRepository;
     private final FriendshipRepository friendshipRepository;
 
-    @Override
-    public User addUser(UserDTO userDTO) {
 
-        User user = User.builder()
-                .firstName(userDTO.getFirstName())
-                .lastName(userDTO.getLastName())
-                .email(userDTO.getEmail())
-                .password(userDTO.getPassword())
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
-                .build();
-        return userRepository.save(user);
-    }
 
     @Override
-    public ResponseEntity<String> deleteUser(Integer userId) {
+    public ResponseEntity<?> deleteUser(Integer userId) throws GeneralException {
+
         Optional<User> user =userRepository.findById(userId);
         if (user.isEmpty()){
-            return new ResponseEntity<>("User ID not found" , HttpStatus.BAD_REQUEST);
+            throw new GeneralException(ErrorCode.USER_DOESNT_EXIST,"Invalid User Id");
         }else {
             userRepository.deleteById(userId);
-            return new ResponseEntity<>("User deleted successfully" , HttpStatus.OK);        }
+            return new ResponseEntity<>("User deleted successfully" , HttpStatus.OK);
+        }
     }
 
     @Override
-    public User updateUser(Integer userId, UserDTO newUserDTO) {
+    public ResponseEntity<?> updateUser(Integer userId, UserDTO newUserDTO)throws GeneralException {
         //find User by its ID
-        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found"));
-        //update User values on (UserDTO)
+        User user = userRepository.findById(userId).orElseThrow(()->new GeneralException(ErrorCode.USER_DOESNT_EXIST,"User does not exist"));
+                //update User values on (UserDTO);
         user.setFirstName(newUserDTO.getFirstName());
         user.setLastName(newUserDTO.getLastName());
         user.setEmail(newUserDTO.getEmail());
         user.setUpdatedAt(LocalDateTime.now());
         userRepository.save(user);
-        return user;
+        return new ResponseEntity<>(user,HttpStatus.OK);
     }
 
     @Override
-    public User getSpecificUser(Integer userId) {
+    public User getSpecificUser(Integer userId) throws GeneralException{
        return userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User is not Found"));
     }
 
@@ -93,7 +80,7 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
-    public ResponseEntity<?> getAllFriends(Integer userId,int page,int size) {
+    public ResponseEntity<?> getAllFriends(Integer userId,Pageable pageable)throws GeneralException {
         try {
             Optional<User> user = userRepository.findById(userId);
             if (user.isEmpty()){
@@ -107,6 +94,8 @@ public class UserServiceImplementation implements UserService {
                     friendships ) {
                     listOfFriendsIds.add(friendship.getFriendId());
                 }
+                int page = pageable.getPageNumber();
+                int size = pageable.getPageSize();
                 int startIndex = page * size;
                 int endIndex = Math.min(startIndex + size, listOfFriendsIds.size());
 

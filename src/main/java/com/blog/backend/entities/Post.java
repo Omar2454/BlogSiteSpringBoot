@@ -1,6 +1,7 @@
 package com.blog.backend.entities;
 
-import com.blog.backend.Serializers.TestSerializer;
+import com.blog.backend.Serializers.CommentSerializer;
+import com.blog.backend.Serializers.ReactsSerializer;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -10,9 +11,7 @@ import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -55,12 +54,13 @@ public class Post {
 
     @OneToMany(mappedBy = "post")
     @JsonManagedReference
+    @JsonSerialize(using = CommentSerializer.class)
     private Set<Comment> comments = new LinkedHashSet<>();
 
 
     @OneToMany(mappedBy = "post")
     @JsonManagedReference
-    @JsonSerialize(using = TestSerializer.class)
+    @JsonSerialize(using = ReactsSerializer.class)
     private Set<React> reacts = new LinkedHashSet<>();
 
 }

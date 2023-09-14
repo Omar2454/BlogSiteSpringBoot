@@ -36,7 +36,6 @@ public class CommentServiceImplementation implements CommentService {
         Comment comment = Comment.builder()
                 .comment_text(commentDTO.getCommentText())
                 .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
                 .user(user)
                 .post(post)
                 .build();

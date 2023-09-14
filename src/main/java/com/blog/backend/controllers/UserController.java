@@ -1,5 +1,7 @@
 package com.blog.backend.controllers;
+
 import com.blog.backend.controllers.DTOs.UserDTO;
+import com.blog.backend.controllers.exceptions.GeneralException;
 import com.blog.backend.entities.User;
 import com.blog.backend.services.serviceInterface.UserService;
 import org.slf4j.Logger;
@@ -24,46 +26,38 @@ public class UserController {
 
 
 
-    @PostMapping("add")
-     public User addUser(@RequestBody UserDTO userDTO){
-       return userService.addUser(userDTO);
-    }
 
-    //check
     @DeleteMapping("delete/{user-id}")
-    public ResponseEntity<String> deleteUser(@PathVariable("user-id") Integer userId){
+    public ResponseEntity<?> deleteUser(@PathVariable("user-id") Integer userId) throws GeneralException {
         return userService.deleteUser(userId);
     }
 
-    //check
+
 
 
     @PutMapping("update/{user-id}")
-    public User updateUser(@PathVariable("user-id") Integer userId , @RequestBody UserDTO newUserDTO){
-        return userService.updateUser(userId,newUserDTO);
+    public ResponseEntity<?> updateUser(@PathVariable("user-id") Integer userId, @RequestBody UserDTO newUserDTO) throws GeneralException {
+        return userService.updateUser(userId, newUserDTO);
     }
 
     //check
     @GetMapping("get/{user-id}")
-    public  User getSpecificUser(@PathVariable("user-id") Integer userId){
+    public User getSpecificUser(@PathVariable("user-id") Integer userId) throws GeneralException {
         return userService.getSpecificUser(userId);
 
     }
 
 
-
     @GetMapping("get/all")
-    public ResponseEntity<Page<User>> getAllUser(Pageable pageable) {
+    public ResponseEntity<Page<User>> getAllUser(Pageable pageable) throws GeneralException {
         Page<User> users = userService.getAllUser(pageable);
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @GetMapping("get/friends/{userId}")
-    public ResponseEntity<?> getAllFriends(@PathVariable("userId") Integer userId,
-                                           @RequestParam(name = "page", defaultValue = "0") int page,
-                                           @RequestParam(name = "size", defaultValue = "10") int size) {
+    public ResponseEntity<?> getAllFriends(@PathVariable("userId") Integer userId, Pageable pageable) {
         try {
-            ResponseEntity<?> response = userService.getAllFriends(userId,page,size);
+            ResponseEntity<?> response = userService.getAllFriends(userId, pageable);
 
             if (response.getStatusCode() == HttpStatus.OK) {
                 return response;

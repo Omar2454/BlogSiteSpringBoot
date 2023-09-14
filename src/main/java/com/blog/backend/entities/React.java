@@ -1,13 +1,8 @@
 package com.blog.backend.entities;
 
-import com.blog.backend.Serializers.TestSerializer;
 import com.blog.backend.entities.enums.Reacts;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -16,6 +11,9 @@ import org.hibernate.annotations.OnDeleteAction;
 @Entity
 @Table(name = "reacts")
 @ToString
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class React {
     @EmbeddedId
     private ReactId id;
@@ -24,12 +22,14 @@ public class React {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "user", nullable = false)
+    @ToString.Exclude
     private User user;
 
     @MapsId("post")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "post", nullable = false)
+    @ToString.Exclude
     private Post post;
 
     @Enumerated(EnumType.STRING)
