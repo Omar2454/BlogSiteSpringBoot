@@ -10,8 +10,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 import lombok.*;
-
-import org.springframework.lang.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -39,12 +37,24 @@ public class User implements UserDetails {
     @Column(name = "last_name", length = 50)
     private String lastName;
 
-    @Column(name = "email", nullable = false, length = 50 , unique = true)
+    @Column(name = "email", nullable = false, length = 50, unique = true)
     private String email;
 
     @Column(name = "password", nullable = false, length = 100)
     @JsonIgnore
     private String password;
+
+    @Column(name = "image", length = 256)
+    private String image;
+
+    @Column(name = "phone_number", length = 20)
+    private String phoneNumber;
+
+    @Column(name = "bio", length = 100)
+    private String bio;
+
+    @Column(name = "facebook", length = 100)
+    private String facebook;
 
 
     @Column(name = "roles", nullable = false, length = 30)
@@ -78,6 +88,7 @@ public class User implements UserDetails {
     @JsonManagedReference
     @JsonIgnore
     private Set<Friendship> friendships2;
+
 
     @Override
     @JsonIgnore
