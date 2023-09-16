@@ -63,7 +63,8 @@ public class User implements UserDetails {
     @JsonManagedReference
     private Set<Comment> comments = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
     @JsonManagedReference
     private Set<Post> posts = new LinkedHashSet<>();
 

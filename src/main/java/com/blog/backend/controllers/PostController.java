@@ -24,6 +24,19 @@ public class PostController {
        return postService.addPost(postDTO);
 
     }
+
+
+//    @PostMapping("share/{original-post-id}/{post-to-share-id}")
+//    public Post sharePost(@PathVariable("original-post-id") Integer originalPostId,@PathVariable("post-to-share-id") Integer postToShareId){
+//        return postService.sharePost(originalPostId,postToShareId);
+//    }
+
+    @PostMapping("share/{original-post-id}/{post-to-share-id}")
+    public Post sharePost(@PathVariable("original-post-id") Integer originalPostId,@PathVariable("post-to-share-id") Integer postToShareId , @RequestBody PostDTO sharePostDTO){
+    return postService.sharePost(originalPostId , postToShareId , sharePostDTO);
+    }
+
+
     //check
     @DeleteMapping("delete/{post-id}")
     public ResponseEntity<String> deletePost(@PathVariable("post-id") Integer postId){

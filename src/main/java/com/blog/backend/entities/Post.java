@@ -55,7 +55,9 @@ public class Post {
     @JsonManagedReference
     private Set<Comment> comments = new LinkedHashSet<>();
 
-
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "shared_post_id")
+    private Post sharePost;
 
 
 }

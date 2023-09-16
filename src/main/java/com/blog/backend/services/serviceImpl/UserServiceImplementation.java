@@ -50,7 +50,8 @@ public class UserServiceImplementation implements UserService {
             return new ResponseEntity<>("User ID not found" , HttpStatus.BAD_REQUEST);
         }else {
             userRepository.deleteById(userId);
-            return new ResponseEntity<>("User deleted successfully" , HttpStatus.OK);        }
+            return new ResponseEntity<>("User deleted successfully" , HttpStatus.OK);
+        }
     }
 
     @Override
@@ -71,7 +72,7 @@ public class UserServiceImplementation implements UserService {
        return userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User is not Found"));
     }
 
-    //TODO get all user
+
     @Override
     public List<User> getAllUser() {
         return userRepository.findAll();

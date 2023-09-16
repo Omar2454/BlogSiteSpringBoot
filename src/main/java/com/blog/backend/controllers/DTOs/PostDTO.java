@@ -15,6 +15,7 @@ public class PostDTO {
     String postTitle;
     String postDescription;
     String imgUrl;
+    String imageBase;
     //foreign
     int userId;
 }
