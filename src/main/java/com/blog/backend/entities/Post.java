@@ -53,7 +53,6 @@ public class Post {
 
 
     @OneToMany(mappedBy = "post")
-    @JsonManagedReference
     @JsonSerialize(using = CommentSerializer.class)
     private Set<Comment> comments = new LinkedHashSet<>();
 

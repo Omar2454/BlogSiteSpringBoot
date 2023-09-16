@@ -70,7 +70,7 @@ public class PostServiceImplementation implements PostService {
     }
 
 
-    //TODO get all post
+
     @Override
     public Page<Post> getAllPosts(Pageable pageable) {
         return postRepository.findAll(pageable);

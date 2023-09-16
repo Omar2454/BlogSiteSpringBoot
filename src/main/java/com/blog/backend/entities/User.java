@@ -1,10 +1,13 @@
 package com.blog.backend.entities;
 
+import com.blog.backend.Serializers.CommentSerializer;
+import com.blog.backend.Serializers.PostSerializer;
 import com.blog.backend.entities.enums.Role;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -59,10 +62,11 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user")
     @JsonManagedReference
+    @JsonSerialize(using = CommentSerializer.class)
     private Set<Comment> comments = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "user")
-    @JsonManagedReference
+    @JsonSerialize(using = PostSerializer.class)
     private Set<Post> posts = new LinkedHashSet<>();
 
 
