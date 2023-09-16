@@ -57,8 +57,8 @@ public class Post {
     private Set<Comment> comments = new LinkedHashSet<>();
 
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "shared_post_id")
+    @OneToOne
+    @JoinColumn(name = "shared_post_id",unique = false)
     private Post sharePost;
 
 
