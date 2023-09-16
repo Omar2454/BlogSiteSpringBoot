@@ -43,7 +43,7 @@ public class Post {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")//foreign key from table "users"
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
