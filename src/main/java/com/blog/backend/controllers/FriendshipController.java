@@ -47,6 +47,17 @@ public class FriendshipController {
         return BlogUtils.getResponseEntity(BlogConstants.SOMETHING_WENT_WRONG,HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
+    @DeleteMapping("remove/{user1Id}/{user2Id}")
+    public ResponseEntity<String> removeFriend(@PathVariable("user1Id") Integer remover,@PathVariable("user2Id") Integer gettingRemoved) {
+        try {
+            return friendshipService.removeFriend(remover,gettingRemoved);
+        } catch (Exception e) {
+            logger.error("Error Logging user", e);
+        }
+        return BlogUtils.getResponseEntity(BlogConstants.SOMETHING_WENT_WRONG,HttpStatus.INTERNAL_SERVER_ERROR);
+
+    }
+
 
 
 }

@@ -1,16 +1,17 @@
 package com.blog.backend.entities;
 
+import com.blog.backend.Serializers.CommentSerializer;
+import com.blog.backend.Serializers.ReactsSerializer;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -52,12 +53,20 @@ public class Post {
 
 
     @OneToMany(mappedBy = "post")
-    @JsonManagedReference
+    @JsonSerialize(using = CommentSerializer.class)
     private Set<Comment> comments = new LinkedHashSet<>();
+
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "shared_post_id")
     private Post sharePost;
+
+
+
+    @OneToMany(mappedBy = "post")
+    @JsonManagedReference
+    @JsonSerialize(using = ReactsSerializer.class)
+    private Set<React> reacts = new LinkedHashSet<>();
 
 
 }

@@ -5,17 +5,20 @@ import com.blog.backend.entities.Post;
 import com.blog.backend.entities.User;
 import com.blog.backend.repos.PostRepository;
 import com.blog.backend.repos.UserRepository;
-import com.blog.backend.services.serviceinterface.PostService;
+import com.blog.backend.services.serviceInterface.PostService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,19 +29,14 @@ public class PostServiceImplementation implements PostService {
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+
     @Override
     public Post addPost(PostDTO postDTO) {
         User user = userRepository.findById(postDTO.getUserId()).orElseThrow(() -> new EntityNotFoundException("User Not found"));
-        Post post =  Post.builder()
-                .postTitle(postDTO.getPostTitle())
-                .postDescription(postDTO.getPostDescription())
-                .imageBase(postDTO.getImgUrl())
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
-                .user(user)
-                .build();
+        Post post = Post.builder().postTitle(postDTO.getPostTitle()).postDescription(postDTO.getPostDescription()).imageBase(postDTO.getImgUrl()).createdAt(LocalDateTime.now()).user(user).build();
         return postRepository.save(post);
     }
+
 
     @Override                                       //(userId who share)
     public Post sharePost(Integer originalPostId, Integer postToShareId, PostDTO sharePostDTO) {
@@ -53,8 +51,7 @@ public class PostServiceImplementation implements PostService {
         User user = userRepository.findById(postToShareId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-//TODO: Validate if post id was already shared then make it reference to original post id
-// Check if the original post has been previously shared
+
 
         Post sharedPostReference = originalPost.getSharePost();
         if (sharedPostReference != null) {
@@ -62,8 +59,7 @@ public class PostServiceImplementation implements PostService {
             //take the original post ID
             originalPost = sharedPostReference;
         }
-        //TODO: Otherwise
-//        // Create a new post for sharing based on the original post
+
         Post sharedPost = Post.builder()
                 .postTitle(sharePostDTO.getPostTitle())  //which you are typing it in request body
                 .postDescription(sharePostDTO.getPostDescription())  //which you are typing it in request body
@@ -157,19 +153,16 @@ public class PostServiceImplementation implements PostService {
 
     }
 
-    public List<Post> getAllPostByUserId(Integer userId){
-        return postRepository.findAllByUserId(userId);
+    public Page<Post> getAllPostByUserId(Integer userId, Pageable pageable) {
+        return postRepository.findAllByUserId(userId, pageable);
     }
 
 
-    //TODO get all post
+
     @Override
-    public List<Post> getAllPosts() {
-        return postRepository.findAll();
+    public Page<Post> getAllPosts(Pageable pageable) {
+        return postRepository.findAll(pageable);
     }
-
-
-
 
 
 }

@@ -5,17 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
-
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class PostDTO {
-        String postTitle;
-    String postDescription;
-    String imgUrl;
-    String imageBase;
-    //foreign
-    int userId;
+@AllArgsConstructor
+public class FriendDTO {
+    private Integer id;
+    private String firstName;
+    private String lastName;
 }
