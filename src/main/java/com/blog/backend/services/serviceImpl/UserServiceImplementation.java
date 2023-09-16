@@ -73,7 +73,7 @@ public class UserServiceImplementation implements UserService {
        return userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User is not Found"));
     }
 
-    //TODO get all user
+
     @Override
     public Page<User> getAllUser(Pageable pageable) {
         return userRepository.findAll(pageable);

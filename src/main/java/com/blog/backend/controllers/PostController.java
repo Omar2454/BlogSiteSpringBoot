@@ -18,20 +18,27 @@ public class PostController {
     @Autowired
     private PostService postService;
 
-    //check
+    
     @PostMapping("add")
     public Post addPost(@RequestBody PostDTO postDTO) {
         return postService.addPost(postDTO);
 
     }
 
-    //check
+
+    @PostMapping("share/{original-post-id}/{post-to-share-id}")
+    public Post sharePost(@PathVariable("original-post-id") Integer originalPostId,@PathVariable("post-to-share-id") Integer postToShareId , @RequestBody PostDTO sharePostDTO){
+    return postService.sharePost(originalPostId , postToShareId , sharePostDTO);
+    }
+
+
+    
     @DeleteMapping("delete/{post-id}")
     public ResponseEntity<String> deletePost(@PathVariable("post-id") Integer postId) {
         return postService.deletePost(postId);
     }
 
-    //check
+    
     @PutMapping("update/{post-id}")
     public Post updatePost(@PathVariable("post-id") Integer postId, @RequestBody PostDTO newPostDTO) {
         return postService.updatePost(postId, newPostDTO);

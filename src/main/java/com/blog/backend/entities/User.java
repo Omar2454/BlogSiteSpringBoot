@@ -60,6 +60,7 @@ public class User implements UserDetails {
     @Column(name = "roles", nullable = false, length = 30)
     @Enumerated(EnumType.STRING)
     @JsonProperty("roles")
+    @Transient
     private Role roles;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
@@ -75,8 +76,10 @@ public class User implements UserDetails {
     @JsonSerialize(using = CommentSerializer.class)
     private Set<Comment> comments = new LinkedHashSet<>();
 
+
     @OneToMany(mappedBy = "user")
     @JsonSerialize(using = PostSerializer.class)
+
     private Set<Post> posts = new LinkedHashSet<>();
 
 

@@ -25,7 +25,7 @@ import java.util.Set;
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "post_id", nullable = false)
+    @Column(name = "post_id", nullable = false , unique = false)
     private Integer id;
 
     @Column(name = "post_title", length = 1000)
@@ -57,9 +57,16 @@ public class Post {
     private Set<Comment> comments = new LinkedHashSet<>();
 
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "shared_post_id")
+    private Post sharePost;
+
+
+
     @OneToMany(mappedBy = "post")
     @JsonManagedReference
     @JsonSerialize(using = ReactsSerializer.class)
     private Set<React> reacts = new LinkedHashSet<>();
+
 
 }
