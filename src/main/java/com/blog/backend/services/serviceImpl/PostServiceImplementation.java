@@ -40,7 +40,7 @@ public class PostServiceImplementation implements PostService {
         return postRepository.save(post);
     }
 
-    @Override
+    @Override                                       //(userId who share)
     public Post sharePost(Integer originalPostId, Integer postToShareId, PostDTO sharePostDTO) {
         // Find the original post by its ID
         Optional<Post> originalPostOptional = postRepository.findById(originalPostId);
@@ -53,36 +53,29 @@ public class PostServiceImplementation implements PostService {
         User user = userRepository.findById(postToShareId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-        // Create a new post for sharing based on the original post
+//TODO: Validate if post id was already shared then make it reference to original post id
+// Check if the original post has been previously shared
+
+        Post sharedPostReference = originalPost.getSharePost();
+        if (sharedPostReference != null) {
+            // The original post has already been shared, so we should reference the original post's ID
+            //take the original post ID
+            originalPost = sharedPostReference;
+        }
+        //TODO: Otherwise
+//        // Create a new post for sharing based on the original post
         Post sharedPost = Post.builder()
-                .postTitle(sharePostDTO.getPostTitle())  // Use the original post's title
-                .postDescription(sharePostDTO.getPostDescription())  // Use the original post's description
+                .postTitle(sharePostDTO.getPostTitle())  //which you are typing it in request body
+                .postDescription(sharePostDTO.getPostDescription())  //which you are typing it in request body
                 .imageBase(originalPost.getImageBase())  // Use the original post's image
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
-                .user(user)  // Set the user who is sharing the post
-                .sharePost(originalPost)  // Set the original post being shared
+                .user(user)  // Set the user id who is sharing the post
+                .sharePost(originalPost)  // Set the (modified in title and description) original post being shared
                 .build();
 
         return postRepository.save(sharedPost);
     }
-
-
-
-
-
-
-
-//    @Override
-//    public ResponseEntity<String> deletePost(Integer postId) {
-//         Optional<Post> post = postRepository.findById(postId);
-//         if(post.isEmpty()){
-//             return  new ResponseEntity<>("Post ID not found" , HttpStatus.BAD_REQUEST);
-//         }else{
-//             postRepository.deleteById(postId);
-//return new ResponseEntity<>("Post Deleted Successfully" , HttpStatus.OK);
-//         }
-//    }
 
     @Override
     public ResponseEntity<String> deletePost(Integer postId) {
@@ -111,18 +104,7 @@ public class PostServiceImplementation implements PostService {
         }
     }
 
-//    @Override
-//    public Post updatePost(Integer postId, PostDTO newPostDTO) {
-//        //find post by its ID
-//        Post post = postRepository.findById(postId).orElseThrow(() -> new EntityNotFoundException("Post not updated"));
-//        //update (PostDTO)
-//        post.setPostTitle(newPostDTO.getPostTitle());
-//        post.setPostDescription(newPostDTO.getPostDescription());
-//        post.setImageBase(newPostDTO.getImgUrl());
-//        post.setUpdatedAt(LocalDateTime.now());
-//
-//        return postRepository.saveAndFlush(post);
-//    }
+
 
     @Override
     public Post updatePost(Integer postId, PostDTO newPostDTO) {

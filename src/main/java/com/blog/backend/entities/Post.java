@@ -24,7 +24,7 @@ import java.util.Set;
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "post_id", nullable = false)
+    @Column(name = "post_id", nullable = false , unique = false)
     private Integer id;
 
     @Column(name = "post_title", length = 1000)
