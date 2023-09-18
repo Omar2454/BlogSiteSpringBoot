@@ -43,6 +43,8 @@ public class Friendship {
     @Column(name = "status")
     private FriendshipStatus status;
 
+
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     @Column(name = "accepted_at")
     private LocalDateTime acceptedAt;

@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -61,4 +62,11 @@ public class ReactsServiceImpl implements ReactsService {
             return new ResponseEntity<>("React Set to "+react1.getEmoji()+" Successfully", HttpStatus.OK);
         }
     }
+
+    @Override
+    public List<React> getAllReacts() {
+        return reactRepository.findAll();
+    }
+
+
 }

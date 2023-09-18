@@ -15,7 +15,7 @@ public interface PostService {
    Post addPost(PostDTO postDTO);
 
 
-   Post sharePost(Integer originalPostId, Integer postToShareId , PostDTO sharePostDTO);
+   Post sharePost(Integer originalPostId, Integer userWhoWantToShare , PostDTO sharePostDTO);
 
    ResponseEntity<String> deletePost(Integer postId);
 

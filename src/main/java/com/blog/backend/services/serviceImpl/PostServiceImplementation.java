@@ -35,13 +35,19 @@ public class PostServiceImplementation implements PostService {
     @Override
     public Post addPost(PostDTO postDTO) {
         User user = userRepository.findById(postDTO.getUserId()).orElseThrow(() -> new EntityNotFoundException("User Not found"));
-        Post post = Post.builder().postTitle(postDTO.getPostTitle()).postDescription(postDTO.getPostDescription()).imageBase(postDTO.getImgUrl()).createdAt(LocalDateTime.now()).user(user).build();
+        Post post = Post.builder()
+                .postTitle(postDTO.getPostTitle())
+                .postDescription(postDTO.getPostDescription())
+                .imageBase(postDTO.getImgUrl())
+                .createdAt(LocalDateTime.now())
+                .user(user)
+                .build();
         return postRepository.save(post);
     }
 
 
     @Override                                       //(userId who share)
-    public Post sharePost(Integer originalPostId, Integer postToShareId, PostDTO sharePostDTO) {
+    public Post sharePost(Integer originalPostId, Integer userWhoWantToShare, PostDTO sharePostDTO) {
         // Find the original post by its ID
         Optional<Post> originalPostOptional = postRepository.findById(originalPostId);
         if (originalPostOptional.isEmpty()) {
@@ -50,7 +56,7 @@ public class PostServiceImplementation implements PostService {
         Post originalPost = originalPostOptional.get();
 
         // Find the user who is sharing the post
-        User user = userRepository.findById(postToShareId)
+        User user = userRepository.findById(userWhoWantToShare)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
 
@@ -139,10 +145,11 @@ public class PostServiceImplementation implements PostService {
         // Update the original post
         originalPost.setPostTitle(newPostDTO.getPostTitle());
         originalPost.setPostDescription(newPostDTO.getPostDescription());
-        originalPost.setImageBase(newPostDTO.getImgUrl());
+        originalPost.setImageBase(newPostDTO.getImageBase());
         originalPost.setUpdatedAt(LocalDateTime.now());
 
-        // Update the shared posts (if any)    //(Custom Query)
+        // Update the shared posts (if any)
+        // (Custom Query)
         List<Post> sharedPosts = postRepository.findBySharePost(originalPost);
         for (Post sharedPost : sharedPosts) {
             updateSharedPost(sharedPost, newPostDTO);

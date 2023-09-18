@@ -70,5 +70,13 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
         }
     }
+
+
+
+    @PutMapping("updateImage/{user-id}")
+    public ResponseEntity<?> updateImageByUserId(@PathVariable("user-id") Integer userId, @RequestBody UserDTO newImage){
+        return userService.updateImageByUserId(userId, newImage);
+    }
+
 }
 

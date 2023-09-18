@@ -44,22 +44,22 @@ public class FriendshipServiceImpl implements FriendshipInterface {
             Optional<User> receiver = userRepository.findById(Receiver);
 
             if (sender.isEmpty() || receiver.isEmpty()) {
-                return BlogUtils.getResponseEntity("User 1 or User 2 Doesn't Exist", HttpStatus.BAD_REQUEST);
+                return BlogUtils.getResponseEntityWithDecision("User 1 or User 2 Doesn't Exist" , false, HttpStatus.BAD_REQUEST);
             } else {
                 Optional<Friendship> friendship = friendshipRepository.findByUserID1AndUserID2(sender.get(), receiver.get());
                 if (friendship.isPresent()) {
-                    return BlogUtils.getResponseEntity("Friend Request already sent", HttpStatus.BAD_REQUEST);
+                    return BlogUtils.getResponseEntityWithDecision("Friend Request already sent" , false, HttpStatus.BAD_REQUEST);
                 } else {
 
                     List<Friendship> friendships = buildFriendship(Sender, Receiver, sender, receiver);
                     friendshipRepository.saveAll(friendships);
-                    return BlogUtils.getResponseEntity("Friend Request Sent by " + sender.get().getFirstName() + " to " + receiver.get().getFirstName(), HttpStatus.OK);
+                    return BlogUtils.getResponseEntityWithDecision("Friend Request Sent by " + sender.get().getFirstName() + " to " + receiver.get().getFirstName() , false, HttpStatus.OK);
                 }
             }
         } catch (Exception e) {
             logger.log(Level.SEVERE, "An error occurred", e);
         }
-        return BlogUtils.getResponseEntity(BlogConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+        return BlogUtils.getResponseEntityWithDecision(BlogConstants.SOMETHING_WENT_WRONG, false , HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 
@@ -79,17 +79,17 @@ public class FriendshipServiceImpl implements FriendshipInterface {
             Optional<User> sender1 = userRepository.findById(sender);
 
             if (receiver1.isEmpty() || sender1.isEmpty()) {
-                return BlogUtils.getResponseEntity("User 1 or User 2 Doesn't Exist", HttpStatus.BAD_REQUEST);
+                return BlogUtils.getResponseEntityWithDecision("User 1 or User 2 Doesn't Exist",decision, HttpStatus.BAD_REQUEST);
             } else {
                 Optional<Friendship> friendship1 = friendshipRepository.findByUserID1AndUserID2(receiver1.get(), sender1.get());
 
                 Optional<Friendship> friendship2 = friendshipRepository.findByUserID1AndUserID2(sender1.get(), receiver1.get());
 
                 if (friendship1.isEmpty() || friendship2.isEmpty()) {
-                    return BlogUtils.getResponseEntity("No Existing Friend Request ", HttpStatus.BAD_REQUEST);
+                    return BlogUtils.getResponseEntityWithDecision("No Existing Friend Request " , decision, HttpStatus.BAD_REQUEST);
                 } else {
                     if (friendship1.get().getStatus() == ACCEPTED) {
-                        return BlogUtils.getResponseEntity("Friend Request Already Accepted", HttpStatus.BAD_REQUEST);
+                        return BlogUtils.getResponseEntityWithDecision("Friend Request Already Accepted" , decision, HttpStatus.BAD_REQUEST);
                     } else {
                         friendship2.get().setAcceptedAt(LocalDateTime.now());
                         friendship1.get().setAcceptedAt(LocalDateTime.now());
@@ -98,11 +98,11 @@ public class FriendshipServiceImpl implements FriendshipInterface {
                             friendship2.get().setStatus(ACCEPTED);
                             friendshipRepository.save(friendship1.get());
                             friendshipRepository.save(friendship2.get());
-                            return BlogUtils.getResponseEntity(sender1.get().getFirstName() + "'s Friend Request Accepted By " + receiver1.get().getFirstName(), HttpStatus.OK);
+                            return BlogUtils.getResponseEntityWithDecision(sender1.get().getFirstName() + "'s Friend Request Accepted By " + receiver1.get().getFirstName(), decision , HttpStatus.OK);
                         } else {
                             friendshipRepository.delete(friendship1.get());
                             friendshipRepository.delete(friendship2.get());
-                            return BlogUtils.getResponseEntity(sender1.get().getFirstName() + "'s Friend Request Rejected By " + receiver1.get().getFirstName(), HttpStatus.OK);
+                            return BlogUtils.getResponseEntityWithDecision(sender1.get().getFirstName() + "'s Friend Request Rejected By " + receiver1.get().getFirstName() , decision, HttpStatus.OK);
                         }
                     }
                 }
@@ -110,7 +110,7 @@ public class FriendshipServiceImpl implements FriendshipInterface {
         } catch (Exception e) {
             logger.log(Level.SEVERE, "An error occurred", e);
         }
-        return BlogUtils.getResponseEntity(BlogConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+        return BlogUtils.getResponseEntityWithDecision(BlogConstants.SOMETHING_WENT_WRONG, decision, HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
 
@@ -120,24 +120,24 @@ public class FriendshipServiceImpl implements FriendshipInterface {
             Optional<User> remover1 = userRepository.findById(remover);
             Optional<User> gettingRemoved1 = userRepository.findById(gettingRemoved);
             if (remover1.isEmpty() || gettingRemoved1.isEmpty()) {
-                return BlogUtils.getResponseEntity("User 1 or User 2 Doesn't Exist", HttpStatus.BAD_REQUEST);
+                return BlogUtils.getResponseEntityWithDecision("User 1 or User 2 Doesn't Exist",false, HttpStatus.BAD_REQUEST);
             } else {
                 Optional<Friendship> friendship1 = friendshipRepository.findByUserID1AndUserID2(remover1.get(), gettingRemoved1.get());
 
                 Optional<Friendship> friendship2 = friendshipRepository.findByUserID1AndUserID2(gettingRemoved1.get(), remover1.get());
                 if (friendship1.isEmpty() || friendship2.isEmpty()) {
-                    return BlogUtils.getResponseEntity("No Existing Friend Request ", HttpStatus.BAD_REQUEST);
+                    return BlogUtils.getResponseEntityWithDecision("No Existing Friend Request ",false, HttpStatus.BAD_REQUEST);
                 } else {
                     friendshipRepository.delete(friendship1.get());
                     friendshipRepository.delete(friendship2.get());
-                    return BlogUtils.getResponseEntity("Friend " + gettingRemoved1.get().getFirstName() + " Removed by " + remover1.get().getFirstName(), HttpStatus.OK);
+                    return BlogUtils.getResponseEntityWithDecision("Friend " + gettingRemoved1.get().getFirstName() + " Removed by " + remover1.get().getFirstName(), false, HttpStatus.OK);
                 }
             }
 
         } catch (Exception e) {
             logger.log(Level.SEVERE, "An error occurred", e);
         }
-        return BlogUtils.getResponseEntity(BlogConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+        return BlogUtils.getResponseEntityWithDecision(BlogConstants.SOMETHING_WENT_WRONG,false, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }

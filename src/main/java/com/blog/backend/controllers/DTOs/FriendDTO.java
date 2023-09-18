@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class FriendDTO {
     private Integer id;
-    private String firstName;
-    private String lastName;
+    private String name;
+    private String pic;
 }

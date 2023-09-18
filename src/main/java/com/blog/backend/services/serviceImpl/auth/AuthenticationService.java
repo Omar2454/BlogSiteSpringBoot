@@ -19,6 +19,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -46,14 +48,17 @@ public class AuthenticationService {
         try {
             if (validateUserDto(userDTO)){
                 var user = userRepository.findByEmail(userDTO.getEmail());
+                //if the email doesn't exist before
                 if (user.isEmpty()){
                     User userToSave = buildUser(userDTO);
                     userRepository.save(userToSave);
+
                     var jwtToken= jwtService.generateToken(userToSave);
 
                     AuthenticationResponse authenticationResponse = AuthenticationResponse.builder()
                             .token(jwtToken)
                             .build();
+
                     return BlogUtils.getResponseEntity("Successfully registered "+authenticationResponse.toString(),HttpStatus.OK);
                 }else{
                     return BlogUtils.getResponseEntity("Email already exists",HttpStatus.BAD_REQUEST);
@@ -69,21 +74,26 @@ public class AuthenticationService {
 
     private User buildUser(UserDTO userDTO) {
         return User.builder()
-                .firstName(userDTO.getFirstName())
-                .lastName(userDTO.getLastName())
+                .firstName(userDTO.getName())
+                .lastName(userDTO.getName())
                 .email(userDTO.getEmail())
                 .password(passwordEncoder.encode(userDTO.getPassword()))
+                .bio(userDTO.getBio())
+                .facebook(userDTO.getFacebookUsername())
+                .phoneNumber(userDTO.getPhoneNumber())
+                .pic(userDTO.getPic())
                 .roles(Role.USER)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .build();
     }
+
+
+
     private boolean validateUserDto(UserDTO userDTO) {
         return userDTO.getEmail() != null
                 && userDTO.getPassword() != null
-                && userDTO.getFirstName() != null
-                && userDTO.getLastName() != null;
-
+                && userDTO.getName() != null;
     }
 
     public ResponseEntity<AuthenticationResponse> authenticate(AuthenticationRequest request) {

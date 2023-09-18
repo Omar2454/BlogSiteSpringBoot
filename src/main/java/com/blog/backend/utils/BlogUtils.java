@@ -9,8 +9,14 @@ public class BlogUtils {
 
     }
 
+    public static ResponseEntity<String> getResponseEntityWithDecision(String responseMessage , boolean decision, HttpStatus httpStatus){
+        return new ResponseEntity<String>
+                ("{\n \"message\":\""+responseMessage+"\", \n \"status\":\""+decision+"\"\n}", httpStatus);
+    }
+
+
     public static ResponseEntity<String> getResponseEntity(String responseMessage, HttpStatus httpStatus){
         return new ResponseEntity<String>
-                ("{\"message\":\""+responseMessage+"\"}", httpStatus);
+                ("{\n \"message\":\""+responseMessage+"\" \n}", httpStatus);
     }
 }

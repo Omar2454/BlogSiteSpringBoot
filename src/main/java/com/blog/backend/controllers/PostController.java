@@ -26,9 +26,9 @@ public class PostController {
     }
 
 
-    @PostMapping("share/{original-post-id}/{post-to-share-id}")
-    public Post sharePost(@PathVariable("original-post-id") Integer originalPostId,@PathVariable("post-to-share-id") Integer postToShareId , @RequestBody PostDTO sharePostDTO){
-    return postService.sharePost(originalPostId , postToShareId , sharePostDTO);
+    @PostMapping("share/{original-post-id}/{user-who-want-to-share}")
+    public Post sharePost(@PathVariable("original-post-id") Integer originalPostId,@PathVariable("user-who-want-to-share") Integer userWhoWantToShare , @RequestBody PostDTO sharePostDTO){
+    return postService.sharePost(originalPostId , userWhoWantToShare , sharePostDTO);
     }
 
 
