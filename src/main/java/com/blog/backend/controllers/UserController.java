@@ -54,6 +54,7 @@ public class UserController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
+
     @GetMapping("get/friends/{userId}")
     public ResponseEntity<?> getAllFriends(@PathVariable("userId") Integer userId, Pageable pageable) {
         try {

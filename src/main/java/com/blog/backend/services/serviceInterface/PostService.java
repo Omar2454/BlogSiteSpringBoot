@@ -29,4 +29,7 @@ public interface PostService {
 
    Page<Post> getAllPostByUserId(Integer userId, Pageable pageable);
 
+
+
+
 }

@@ -24,6 +24,7 @@ public class ReactsController {
     }
 
 
+
     @GetMapping("get/all")
     public List<React> getAllReacts(){
         return  reactsService.getAllReacts();

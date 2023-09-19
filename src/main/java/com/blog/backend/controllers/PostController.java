@@ -18,7 +18,8 @@ public class PostController {
     @Autowired
     private PostService postService;
 
-    
+
+
     @PostMapping("add")
     public Post addPost(@RequestBody PostDTO postDTO) {
         return postService.addPost(postDTO);

@@ -71,12 +71,13 @@ public class CommentServiceImplementation implements CommentService {
        return commentRepository.findById(commentId).orElseThrow(() -> new EntityNotFoundException("Comment are not Found"));
     }
 
+
     @Override
     public List<Comment> getAllComment() {
         return commentRepository.findAll();
     }
 
-    //TODO get all comment
+
 
 
 

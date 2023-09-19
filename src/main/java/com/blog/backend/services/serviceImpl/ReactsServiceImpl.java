@@ -63,6 +63,7 @@ public class ReactsServiceImpl implements ReactsService {
         }
     }
 
+
     @Override
     public List<React> getAllReacts() {
         return reactRepository.findAll();

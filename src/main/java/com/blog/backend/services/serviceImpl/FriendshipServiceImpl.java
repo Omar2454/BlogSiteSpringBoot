@@ -111,8 +111,8 @@ public class FriendshipServiceImpl implements FriendshipInterface {
             logger.log(Level.SEVERE, "An error occurred", e);
         }
         return BlogUtils.getResponseEntityWithDecision(BlogConstants.SOMETHING_WENT_WRONG, decision, HttpStatus.INTERNAL_SERVER_ERROR);
-
     }
+
 
     @Override
     public ResponseEntity<String> removeFriend(Integer remover, Integer gettingRemoved) {

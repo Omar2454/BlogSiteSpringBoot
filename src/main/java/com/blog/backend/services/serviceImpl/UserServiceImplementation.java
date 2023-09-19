@@ -80,7 +80,6 @@ public class UserServiceImplementation implements UserService {
 
 
 
-
     @Override
     public User getSpecificUser(Integer userId) throws GeneralException{
         return userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User is not Found"));

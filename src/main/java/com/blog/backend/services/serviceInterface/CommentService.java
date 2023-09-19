@@ -9,6 +9,7 @@ import java.util.List;
 public interface CommentService {
 
     Comment addComment(CommentDTO commentDTO);
+
     ResponseEntity<String> deleteComment(Integer commentId);
 
     Comment updateComment(Integer commentId , CommentDTO newCommentDTO);

@@ -23,4 +23,8 @@ public interface UserService {
     Page<User> getAllUser(Pageable pageable) throws GeneralException;
 
     ResponseEntity<?> getAllFriends(Integer userId,Pageable pageable) throws GeneralException;
+
+    User getUserByEmail(String email);
+
+
 }

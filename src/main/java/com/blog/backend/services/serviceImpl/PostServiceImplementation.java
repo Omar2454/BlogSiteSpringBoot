@@ -11,7 +11,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import org.hibernate.mapping.Set;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -38,12 +37,13 @@ public class PostServiceImplementation implements PostService {
         Post post = Post.builder()
                 .postTitle(postDTO.getPostTitle())
                 .postDescription(postDTO.getPostDescription())
-                .imageBase(postDTO.getImgUrl())
+                .imageBase(postDTO.getImageBase())
                 .createdAt(LocalDateTime.now())
                 .user(user)
                 .build();
         return postRepository.save(post);
     }
+
 
 
     @Override                                       //(userId who share)
@@ -73,7 +73,6 @@ public class PostServiceImplementation implements PostService {
                 .postDescription(sharePostDTO.getPostDescription())  //which you are typing it in request body
                 .imageBase(originalPost.getImageBase())  // Use the original post's image
                 .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
                 .user(user)  // Set the user id who is sharing the post
                 .sharePost(originalPost)  // Set the (modified in title and description) original post being shared
                 .build();
@@ -136,7 +135,7 @@ public class PostServiceImplementation implements PostService {
     private void updateSharedPost(Post sharedPost, PostDTO newPostDTO) {
         sharedPost.setPostTitle(newPostDTO.getPostTitle());
         sharedPost.setPostDescription(newPostDTO.getPostDescription());
-        sharedPost.setImageBase(newPostDTO.getImgUrl());
+        sharedPost.setImageBase(newPostDTO.getImageBase());
         sharedPost.setUpdatedAt(LocalDateTime.now());
     }
 

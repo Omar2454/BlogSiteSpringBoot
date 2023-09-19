@@ -96,6 +96,7 @@ public class AuthenticationService {
                 && userDTO.getName() != null;
     }
 
+
     public ResponseEntity<AuthenticationResponse> authenticate(AuthenticationRequest request) {
         try {
             Optional<User> userToCheckEmailValidity = userRepository.findByEmail(request.getEmail());
