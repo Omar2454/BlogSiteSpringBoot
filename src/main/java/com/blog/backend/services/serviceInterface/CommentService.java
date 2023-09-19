@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface CommentService {
 
-    Comment addComment(CommentDTO commentDTO, Integer postId, Integer userId);
+    Comment addComment(CommentDTO commentDTO, Integer postId);
 
     ResponseEntity<String> deleteComment(Integer commentId, Integer userId);
 
