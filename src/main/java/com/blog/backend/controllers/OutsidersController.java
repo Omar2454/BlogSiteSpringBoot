@@ -39,7 +39,7 @@ public class OutsidersController {
     }
 
     @PostMapping("register")
-    public ResponseEntity<String> register(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<?> register(@RequestBody UserDTO userDTO) {
         try {
             return authenticationService.register(userDTO);
         } catch (Exception ex) {

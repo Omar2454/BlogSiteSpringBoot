@@ -44,7 +44,7 @@ public class AuthenticationService {
 
 
 
-    public ResponseEntity<String> register(UserDTO userDTO) {
+    public ResponseEntity<?> register(UserDTO userDTO) {
         try {
             if (validateUserDto(userDTO)){
                 var user = userRepository.findByEmail(userDTO.getEmail());
@@ -59,7 +59,7 @@ public class AuthenticationService {
                             .token(jwtToken)
                             .build();
 
-                    return BlogUtils.getResponseEntity("Successfully registered "+authenticationResponse.toString(),HttpStatus.OK);
+                    return new ResponseEntity<>(userToSave,HttpStatus.OK);
                 }else{
                     return BlogUtils.getResponseEntity("Email already exists",HttpStatus.BAD_REQUEST);
                 }
