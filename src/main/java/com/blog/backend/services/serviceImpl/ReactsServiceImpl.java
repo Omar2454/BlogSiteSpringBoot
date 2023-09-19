@@ -1,5 +1,6 @@
 package com.blog.backend.services.serviceImpl;
 
+import com.blog.backend.controllers.DTOs.ReactDTO;
 import com.blog.backend.controllers.exceptions.ErrorCode;
 import com.blog.backend.controllers.exceptions.GeneralException;
 import com.blog.backend.entities.Post;
@@ -32,25 +33,25 @@ public class ReactsServiceImpl implements ReactsService {
     private final ReactRepository reactRepository;
 
     @Override
-    public ResponseEntity<?> addReact(Integer user1Id, Integer postId, Reacts react) throws GeneralException {
+    public ResponseEntity<?> addReact(Integer user1Id, ReactDTO reactDTO) throws GeneralException {
 
 
         User user = userRepository.findById(user1Id).orElseThrow(() -> new GeneralException(ErrorCode.USER_DOESNT_EXIST, "User does not exist"));
-        Post post = postRepository.findById(postId).orElseThrow(() -> new GeneralException(ErrorCode.POST_DOESNT_EXIST, "Post does not exist"));
-        ReactId reactId = new ReactId(user1Id,postId);
+        Post post = postRepository.findById(reactDTO.getPostId()).orElseThrow(() -> new GeneralException(ErrorCode.POST_DOESNT_EXIST, "Post does not exist"));
+        ReactId reactId = new ReactId(user1Id,reactDTO.getPostId());
         Optional<React> reactToCheck = reactRepository.findById(reactId);
         if (reactToCheck.isPresent()) {
-            if (reactToCheck.get().getEmoji().equals(react)){
+            if (reactToCheck.get().getEmoji().equals(reactDTO.getReact())){
                 throw new GeneralException(ErrorCode.REACT_ALREADY_EXISTS, "React already exists ");
             }else {
-                reactToCheck.get().setEmoji(react);
+                reactToCheck.get().setEmoji(reactDTO.getReact());
                 reactRepository.save(reactToCheck.get());
                 return new ResponseEntity<>("React Updated to "+reactToCheck.get().getEmoji()+" Successfully", HttpStatus.OK);
             }
         } else {
             React react1 = React.builder()
                     .id(reactId)
-                    .emoji(react)
+                    .emoji(reactDTO.getReact())
                     .user(user)
                     .post(post)
                     .build();

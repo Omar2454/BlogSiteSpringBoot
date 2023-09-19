@@ -1,6 +1,7 @@
 package com.blog.backend.controllers;
 
 
+import com.blog.backend.controllers.DTOs.ReactDTO;
 import com.blog.backend.controllers.exceptions.GeneralException;
 import com.blog.backend.entities.React;
 import com.blog.backend.entities.enums.Reacts;
@@ -18,9 +19,9 @@ public class ReactsController {
     private final ReactsService reactsService;
 
 
-    @PostMapping("addOrUpdate/{userId}/{postId}/{react}")
-    public ResponseEntity<?> addReactOrChange(@PathVariable("userId") Integer user1Id, @PathVariable("postId") Integer postId, @PathVariable("react") Reacts react) throws GeneralException {
-        return reactsService.addReact(user1Id, postId, react);
+    @PostMapping("addOrUpdate/{userId}")
+    public ResponseEntity<?> addReactOrChange(@PathVariable("userId") Integer user1Id, @RequestBody ReactDTO reactDTO) throws GeneralException {
+        return reactsService.addReact(user1Id, reactDTO);
     }
 
 
