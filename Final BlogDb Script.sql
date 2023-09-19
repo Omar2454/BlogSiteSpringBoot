@@ -11,7 +11,7 @@ create table users
     updated_at   datetime(6)            null,
     phone_number varchar(20)            null,
     bio          varchar(100)           null,
-    image        varchar(256)           null,
+    image        longtext           null,
     facebook     varchar(100)           null,
     constraint UK_6dotkott2kjsp8vw4d0m25fb7
         unique (email)
