@@ -63,10 +63,14 @@ public class ReactsServiceImpl implements ReactsService {
         }
     }
 
+    @Override
+    public List<React> getAllReactsByPostId(Integer postId) {
+        return reactRepository.findAllReactByPostId(postId);
+    }
 
     @Override
-    public List<React> getAllReacts() {
-        return reactRepository.findAll();
+    public Integer getReactCountsByPostId(Integer postId) {
+        return reactRepository.findAllReactByPostId(postId).size();
     }
 
 

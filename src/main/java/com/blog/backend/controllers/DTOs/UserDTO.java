@@ -22,7 +22,7 @@ public class UserDTO {
     private String facebookUsername;
 
     //image Profile
-    private String pic;
+    private String image;
 
 
 

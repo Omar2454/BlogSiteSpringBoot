@@ -10,6 +10,7 @@ import com.blog.backend.repos.FriendshipRepository;
 import com.blog.backend.repos.PostRepository;
 import com.blog.backend.repos.UserRepository;
 import com.blog.backend.services.serviceInterface.UserService;
+import com.blog.backend.utils.HelperFunctions;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -64,7 +65,7 @@ public class UserServiceImplementation implements UserService {
         user.setLastName(newUserDTO.getName());
         user.setEmail(newUserDTO.getEmail());
         user.setUpdatedAt(LocalDateTime.now());
-        user.setPic(newUserDTO.getPic());
+        user.setImage(newUserDTO.getImage());
         userRepository.save(user);
         return new ResponseEntity<>(user,HttpStatus.OK);
     }
@@ -73,7 +74,7 @@ public class UserServiceImplementation implements UserService {
     @Override
     public ResponseEntity<?> updateImageByUserId(Integer userId, UserDTO newImage) {
         User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User does not exist"));
-        user.setPic(newImage.getPic());
+        user.setImage(HelperFunctions.setBase64(userId,newImage.getImage(),"user"));
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
@@ -82,7 +83,9 @@ public class UserServiceImplementation implements UserService {
 
     @Override
     public User getSpecificUser(Integer userId) throws GeneralException{
-        return userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User is not Found"));
+        User user =  userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User is not Found"));
+        user.setImage(HelperFunctions.getBase64(userId , "user"));
+        return user;
     }
 
 
@@ -117,7 +120,7 @@ public class UserServiceImplementation implements UserService {
                     FriendDTO friendDTO = FriendDTO.builder()
                             .id(friend.getId())
                             .name(friend.getFirstName())
-                            .pic(friend.getPic())
+                            .pic(friend.getImage())
                             .build();
                     friendsDto.add(friendDTO);
                 }
@@ -132,4 +135,6 @@ public class UserServiceImplementation implements UserService {
         }
 
     }
+
+
 }

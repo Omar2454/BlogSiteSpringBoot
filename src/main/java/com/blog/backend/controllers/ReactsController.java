@@ -24,9 +24,19 @@ public class ReactsController {
     }
 
 
+//
+//    @GetMapping("get/all")
+//    public List<React> getAllReacts(){
+//        return  reactsService.getAllReacts();
+//    }
 
-    @GetMapping("get/all")
-    public List<React> getAllReacts(){
-        return  reactsService.getAllReacts();
+    @GetMapping("get/all/{post-id}")
+    public List<React> getAllReactsByPostId(@PathVariable("post-id") Integer postId){
+        return reactsService.getAllReactsByPostId(postId);
+    }
+
+    @GetMapping("get/count/{post-id}")
+    public Integer getReactCountsByPostId(@PathVariable("post-id") Integer postId){
+        return reactsService.getReactCountsByPostId(postId);
     }
 }

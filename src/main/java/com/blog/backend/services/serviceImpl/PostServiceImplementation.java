@@ -172,5 +172,10 @@ public class PostServiceImplementation implements PostService {
         return postRepository.findAll(pageable);
     }
 
+    @Override
+    public Integer getPostCount() {
+        return postRepository.findAll().size();
+    }
+
 
 }

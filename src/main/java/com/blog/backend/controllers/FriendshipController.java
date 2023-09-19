@@ -2,6 +2,7 @@ package com.blog.backend.controllers;
 
 
 import com.blog.backend.constants.BlogConstants;
+import com.blog.backend.controllers.exceptions.GeneralException;
 import com.blog.backend.services.serviceImpl.FriendshipServiceImpl;
 import com.blog.backend.utils.BlogUtils;
 import lombok.AllArgsConstructor;
@@ -30,7 +31,9 @@ public class FriendshipController {
     @PostMapping("add/{user1Id}/{user2Id}")
     public ResponseEntity<String> addFriend(@PathVariable("user1Id") Integer user1Id,@PathVariable("user2Id") Integer user2Id ) {
         try {
-            return friendshipService.addFriend(user1Id,user2Id);
+             friendshipService.addFriend(user1Id,user2Id);
+         return friendshipService.acceptOrDeclineFriendRequest(user1Id,user2Id, true);
+
         } catch (Exception e) {
             logger.error("Error Logging user", e);
         }
@@ -58,6 +61,13 @@ public class FriendshipController {
         return BlogUtils.getResponseEntity(BlogConstants.SOMETHING_WENT_WRONG,HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
+
+
+    @GetMapping("isFriends/{user1Id}/{user2Id}")
+    public ResponseEntity<?>isFriends(@PathVariable("user1Id") Integer user1Id,@PathVariable("user2Id") Integer user2Id) throws GeneralException {
+        return friendshipService.isFriendsCheck(user1Id,user2Id);
+    }
+
 
 
 
