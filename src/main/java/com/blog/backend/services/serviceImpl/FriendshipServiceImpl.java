@@ -1,6 +1,8 @@
 package com.blog.backend.services.serviceImpl;
 
 import com.blog.backend.constants.BlogConstants;
+import com.blog.backend.controllers.exceptions.ErrorCode;
+import com.blog.backend.controllers.exceptions.GeneralException;
 import com.blog.backend.entities.Friendship;
 import com.blog.backend.entities.User;
 import com.blog.backend.repos.FriendshipRepository;
@@ -138,6 +140,22 @@ public class FriendshipServiceImpl implements FriendshipInterface {
             logger.log(Level.SEVERE, "An error occurred", e);
         }
         return BlogUtils.getResponseEntityWithDecision(BlogConstants.SOMETHING_WENT_WRONG,false, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Override
+    public ResponseEntity<?> isFriendsCheck(Integer user1Id, Integer user2Id)  throws GeneralException {
+        Optional<User> user1 = userRepository.findById(user1Id);
+        Optional<User> user2 = userRepository.findById(user2Id);
+        if (user1.isEmpty() || user2.isEmpty()) {
+            throw new GeneralException(ErrorCode.USER_DOESNT_EXIST,"User does not exist");
+        }else {
+            Optional<Friendship> friendship = friendshipRepository.findByUserID1AndUserID2(user1.get(),user2.get());
+            if (friendship.isEmpty()){
+                return new ResponseEntity<>(false,HttpStatus.OK);
+            }else {
+                return new ResponseEntity<>(true,HttpStatus.OK);
+            }
+        }
     }
 
 }
