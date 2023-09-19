@@ -55,7 +55,7 @@ public class FriendshipServiceImpl implements FriendshipInterface {
 
                     List<Friendship> friendships = buildFriendship(Sender, Receiver, sender, receiver);
                     friendshipRepository.saveAll(friendships);
-                    return BlogUtils.getResponseEntityWithDecision("Friend Request Sent by " + sender.get().getFirstName() + " to " + receiver.get().getFirstName() , false, HttpStatus.OK);
+                    return BlogUtils.getResponseEntityWithDecision("Friend Request Sent by " + sender.get().getFirstName() + " to " + receiver.get().getFirstName() , true, HttpStatus.OK);
                 }
             }
         } catch (Exception e) {
