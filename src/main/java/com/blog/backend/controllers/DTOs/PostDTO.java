@@ -12,7 +12,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PostDTO {
-        String postTitle;
+    String postTitle;
     String postDescription;
     String imageBase;
     //foreign
