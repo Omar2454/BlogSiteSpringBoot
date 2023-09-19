@@ -4,5 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum Reacts {
-    LIKE,LOVE,ANGRY
+    NOTHING,
+    LIKE,
+    LOVE
 }

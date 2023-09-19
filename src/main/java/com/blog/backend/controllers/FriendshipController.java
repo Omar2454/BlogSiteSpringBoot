@@ -69,10 +69,7 @@ public class FriendshipController {
     }
 
 
-    @GetMapping("isFriends/{user1Id}/{user2Id}")
-    public ResponseEntity<?>isFriends(@PathVariable("user1Id") Integer user1Id,@PathVariable("user2Id") Integer user2Id) throws GeneralException {
-        return friendshipService.isFriendsCheck(user1Id,user2Id);
-    }
+
 
 
 

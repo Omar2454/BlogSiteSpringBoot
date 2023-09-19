@@ -32,7 +32,6 @@ public class React {
     @ToString.Exclude
     private Post post;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "Emoji", nullable = false)
     private Reacts emoji;
 

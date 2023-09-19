@@ -74,7 +74,7 @@ create table reacts
 (
     post  int                            not null,
     user  int                            not null,
-    emoji enum ('ANGRY', 'LIKE', 'LOVE') not null,
+    emoji enum ('NOTHING', 'LIKE', 'LOVE') not null,
     primary key (post, user),
     constraint FK6fpuwxwedqxn4dg7cp2rpua7i
         foreign key (user) references users (user_id)
