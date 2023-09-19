@@ -97,7 +97,7 @@ public class AuthenticationService {
     }
 
 
-    public ResponseEntity<AuthenticationResponse> authenticate(AuthenticationRequest request) {
+    public ResponseEntity<?> authenticate(AuthenticationRequest request) {
         try {
             Optional<User> userToCheckEmailValidity = userRepository.findByEmail(request.getEmail());
             if (userToCheckEmailValidity.isEmpty()){
@@ -116,7 +116,7 @@ public class AuthenticationService {
                         .token(jwtToken)
                         .build();
 
-                return new ResponseEntity<>(authenticationResponse,HttpStatus.OK);
+                return new ResponseEntity<>(user,HttpStatus.OK);
             }
         } catch (AuthenticationException e) {
             logger.log(Level.SEVERE, "An error occurred", e);

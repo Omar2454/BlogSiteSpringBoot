@@ -28,7 +28,7 @@ public class OutsidersController {
 
 
     @PostMapping("authenticate")
-    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
+    public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest request) {
         try {
             return authenticationService.authenticate(request);
         } catch (Exception e) {
