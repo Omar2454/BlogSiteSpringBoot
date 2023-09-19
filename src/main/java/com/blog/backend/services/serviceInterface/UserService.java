@@ -16,9 +16,15 @@ public interface UserService {
 
     ResponseEntity<?> updateUser(Integer userId , UserDTO newUserDTO) throws GeneralException;
 
+    ResponseEntity<?> updateImageByUserId(Integer userId , UserDTO newImage);
+
     User getSpecificUser(Integer userId) throws GeneralException;
 
     Page<User> getAllUser(Pageable pageable) throws GeneralException;
 
     ResponseEntity<?> getAllFriends(Integer userId,Pageable pageable) throws GeneralException;
+
+    User getUserByEmail(String email);
+
+
 }

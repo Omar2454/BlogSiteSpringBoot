@@ -37,6 +37,7 @@ public class OutsidersController {
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
+
     @PostMapping("register")
     public ResponseEntity<String> register(@RequestBody UserDTO userDTO) {
         try {

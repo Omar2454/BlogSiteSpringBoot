@@ -20,11 +20,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -59,18 +59,30 @@ public class UserServiceImplementation implements UserService {
     public ResponseEntity<?> updateUser(Integer userId, UserDTO newUserDTO)throws GeneralException {
         //find User by its ID
         User user = userRepository.findById(userId).orElseThrow(()->new GeneralException(ErrorCode.USER_DOESNT_EXIST,"User does not exist"));
-                //update User values on (UserDTO);
-        user.setFirstName(newUserDTO.getFirstName());
-        user.setLastName(newUserDTO.getLastName());
+        //update User values on (UserDTO);
+        user.setFirstName(newUserDTO.getName());
+        user.setLastName(newUserDTO.getName());
         user.setEmail(newUserDTO.getEmail());
         user.setUpdatedAt(LocalDateTime.now());
+        user.setPic(newUserDTO.getPic());
         userRepository.save(user);
         return new ResponseEntity<>(user,HttpStatus.OK);
     }
 
+
+    @Override
+    public ResponseEntity<?> updateImageByUserId(Integer userId, UserDTO newImage) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User does not exist"));
+        user.setPic(newImage.getPic());
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+
+
+
     @Override
     public User getSpecificUser(Integer userId) throws GeneralException{
-       return userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User is not Found"));
+        return userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User is not Found"));
     }
 
 
@@ -104,8 +116,8 @@ public class UserServiceImplementation implements UserService {
                     User friend = userRepository.findById(userIds).get();
                     FriendDTO friendDTO = FriendDTO.builder()
                             .id(friend.getId())
-                            .firstName(friend.getFirstName())
-                            .lastName(friend.getLastName())
+                            .name(friend.getFirstName())
+                            .pic(friend.getPic())
                             .build();
                     friendsDto.add(friendDTO);
                 }
