@@ -76,6 +76,7 @@ public class UserController {
 
     @PutMapping("updateImage/{user-id}")
     public ResponseEntity<?> updateImageByUserId(@PathVariable("user-id") Integer userId, @RequestBody UserDTO newImage){
+        System.out.println(newImage);
         return userService.updateImageByUserId(userId, newImage);
     }
 

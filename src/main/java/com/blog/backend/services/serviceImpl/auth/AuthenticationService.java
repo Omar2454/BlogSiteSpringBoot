@@ -81,7 +81,7 @@ public class AuthenticationService {
                 .bio(userDTO.getBio())
                 .facebook(userDTO.getFacebookUsername())
                 .phoneNumber(userDTO.getPhoneNumber())
-                .pic(userDTO.getPic())
+                .image(userDTO.getImage())
                 .roles(Role.USER)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())

@@ -26,6 +26,8 @@ public interface PostService {
 
    Page<Post> getAllPosts(Pageable pageable);
 
+   Integer getPostCount();
+
 
    Page<Post> getAllPostByUserId(Integer userId, Pageable pageable);
 

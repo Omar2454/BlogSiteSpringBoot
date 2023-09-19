@@ -7,7 +7,7 @@ import com.blog.backend.entities.User;
 import com.blog.backend.repos.CommentRepository;
 import com.blog.backend.repos.PostRepository;
 import com.blog.backend.repos.UserRepository;
-import com.blog.backend.services.serviceinterface.CommentService;
+import com.blog.backend.services.serviceInterface.CommentService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,9 +30,9 @@ public class CommentServiceImplementation implements CommentService {
     private final PostRepository postRepository;
 
     @Override
-    public Comment addComment(CommentDTO commentDTO) {
-        User user = userRepository.findById(commentDTO.getUserId()).orElseThrow(() -> new EntityNotFoundException("Comment ID not Found"));
-        Post post = postRepository.findById(commentDTO.getPostId()).orElseThrow(() -> new EntityNotFoundException("Post ID not Found"));
+    public Comment addComment( CommentDTO commentDTO, Integer postId , Integer userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("Comment ID not Found"));
+        Post post = postRepository.findById(postId).orElseThrow(() -> new EntityNotFoundException("Post ID not Found"));
         Comment comment = Comment.builder()
                 .comment_text(commentDTO.getCommentText())
                 .createdAt(LocalDateTime.now())
@@ -43,16 +43,19 @@ public class CommentServiceImplementation implements CommentService {
     }
 
     @Override
-    public ResponseEntity<String> deleteComment(Integer commentId) {
-        //find Comment by its ID
-       Optional<Comment> comment =  commentRepository.findById(commentId);
-       if(comment.isEmpty()){
-           return  new ResponseEntity<>("Comment ID not found" , HttpStatus.BAD_REQUEST);
-       }else{
-           commentRepository.deleteById(commentId);
-           return  new ResponseEntity<>("Comment delete Successful" , HttpStatus.OK);
-       }
-
+    public ResponseEntity<String> deleteComment(Integer commentId, Integer userId) {
+        Optional<Comment> comment = commentRepository.findById(commentId);
+        if (comment.isEmpty()) {
+            return new ResponseEntity<>("Comment ID not found", HttpStatus.BAD_REQUEST);
+        } else {
+            Comment foundComment = comment.get();
+            if (foundComment.getUser().getId().equals(userId)) {
+                commentRepository.deleteById(commentId);
+                return new ResponseEntity<>("Comment deleted successfully", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("You are not authorized to delete this comment", HttpStatus.FORBIDDEN);
+            }
+        }
     }
 
     @Override
@@ -73,15 +76,12 @@ public class CommentServiceImplementation implements CommentService {
 
 
     @Override
-    public List<Comment> getAllComment() {
-        return commentRepository.findAll();
+    public List<Comment> getAllCommentByPostId(Integer postId) {
+        return commentRepository.findAllByPostId(postId);
     }
 
-
-
-
-
-
-
-
+    @Override
+    public Integer getAllCommentByPostIdCount(Integer postId) {
+        return commentRepository.findAllByPostId(postId).size();
+    }
 }

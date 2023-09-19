@@ -10,7 +10,10 @@ import java.util.List;
 public interface ReactsService {
     ResponseEntity<?> addReact(Integer user1Id, Integer postId, Reacts react) throws GeneralException;
 
-    List<React> getAllReacts();
+    List<React> getAllReactsByPostId(Integer postId);
+
+
+    Integer getReactCountsByPostId(Integer postId);
 
 
 

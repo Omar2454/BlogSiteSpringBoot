@@ -31,7 +31,9 @@ public class FriendshipController {
     @PostMapping("add/{user1Id}/{user2Id}")
     public ResponseEntity<String> addFriend(@PathVariable("user1Id") Integer user1Id,@PathVariable("user2Id") Integer user2Id ) {
         try {
-            return friendshipService.addFriend(user1Id,user2Id);
+             friendshipService.addFriend(user1Id,user2Id);
+         return friendshipService.acceptOrDeclineFriendRequest(user1Id,user2Id, true);
+
         } catch (Exception e) {
             logger.error("Error Logging user", e);
         }
@@ -65,6 +67,13 @@ public class FriendshipController {
         return friendshipService.isFriendsCheck(user1Id,user2Id);
 
     }
+
+
+    @GetMapping("isFriends/{user1Id}/{user2Id}")
+    public ResponseEntity<?>isFriends(@PathVariable("user1Id") Integer user1Id,@PathVariable("user2Id") Integer user2Id) throws GeneralException {
+        return friendshipService.isFriendsCheck(user1Id,user2Id);
+    }
+
 
 
 

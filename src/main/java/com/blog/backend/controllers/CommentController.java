@@ -3,7 +3,7 @@ package com.blog.backend.controllers;
 import com.blog.backend.controllers.DTOs.CommentDTO;
 import com.blog.backend.entities.Comment;
 import com.blog.backend.entities.Post;
-import com.blog.backend.services.serviceinterface.CommentService;
+import com.blog.backend.services.serviceInterface.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,17 +19,17 @@ public class CommentController {
     private CommentService commentService;
 
     //check
-    @PostMapping("add")
-    public Comment addComment(@RequestBody CommentDTO commentDTO){
-         return commentService.addComment(commentDTO);
-    }
+//    @PostMapping("add")
+//    public Comment addComment(@RequestBody CommentDTO commentDTO){
+//         return commentService.addComment(commentDTO);
+//    }
 
     //check
-    @DeleteMapping("delete/{comment-id}")
-    public ResponseEntity<String> deleteComment(@PathVariable("comment-id") Integer commentId){
-return commentService.deleteComment(commentId);
-
-    }
+//    @DeleteMapping("delete/{comment-id}")
+//    public ResponseEntity<String> deleteComment(@PathVariable("comment-id") Integer commentId){
+//return commentService.deleteComment(commentId);
+//
+//    }
 
 
     //check
@@ -45,11 +45,20 @@ return commentService.deleteComment(commentId);
        return commentService.getSpecificComment(commentId);
     }
 
-    @GetMapping("get/all")
-    public List<Comment> getAllComment(){
-        return commentService.getAllComment();
+
+
+
+    @GetMapping("get/all/{post-id}")
+    public List<Comment> getAllCommentByPostId(@PathVariable("post-id") Integer postId){
+        return commentService.getAllCommentByPostId(postId);
+    }
+
+
+    @GetMapping("get/count/{post-id}")
+    public Integer getAllCommentByPostIdCount(@PathVariable("post-id") Integer postId) {
+    return commentService.getAllCommentByPostIdCount(postId);
     }
 
 
 
-}
+    }

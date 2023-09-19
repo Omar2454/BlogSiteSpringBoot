@@ -46,8 +46,8 @@ public class User implements UserDetails {
     @JsonIgnore
     private String password;
 
-    @Column(name = "image", length = 256)
-    private String pic;
+    @Column(name = "image")
+    private String image;
 
     @Column(name = "phone_number", length = 20)
     private String phoneNumber;
