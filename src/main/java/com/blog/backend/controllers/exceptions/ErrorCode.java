@@ -10,7 +10,9 @@ public enum ErrorCode {
     POST_DOESNT_EXIST("4"),
     SOMETHING_WENT_WRONG("5"),
     REACT_ALREADY_EXISTS("6"),
-    FILE_DELETION_FAILED("7")
+    FILE_DELETION_FAILED("7"),
+    REACT_DOESNT_EXIST("7")
+
     ;
 
 

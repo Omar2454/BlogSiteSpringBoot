@@ -17,5 +17,6 @@ public interface ReactsService {
     Integer getReactCountsByPostId(Integer postId);
 
 
+    ResponseEntity<?> removeReactSe(Integer user1Id, Integer postId) throws GeneralException;
 
 }

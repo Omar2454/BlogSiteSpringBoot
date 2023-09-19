@@ -10,7 +10,7 @@ import com.blog.backend.repos.FriendshipRepository;
 import com.blog.backend.repos.PostRepository;
 import com.blog.backend.repos.UserRepository;
 import com.blog.backend.services.serviceInterface.UserService;
-//import com.blog.backend.utils.HelperFunctions;
+import com.blog.backend.utils.HelperFunctions;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -71,22 +71,22 @@ public class UserServiceImplementation implements UserService {
     }
 
 
-//    @Override
-//    public ResponseEntity<?> updateImageByUserId(Integer userId, UserDTO newImage) {
-//        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User does not exist"));
-//        user.setImage(HelperFunctions.setBase64(userId,newImage.getImage(),"user"));
-//        return new ResponseEntity<>(user, HttpStatus.OK);
-//    }
-//
-//
-//
-//
-//    @Override
-//    public User getSpecificUser(Integer userId) throws GeneralException{
-//        User user =  userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User is not Found"));
-//        user.setImage(HelperFunctions.getBase64(userId , "user"));
-//        return user;
-//    }
+    @Override
+    public ResponseEntity<?> updateImageByUserId(Integer userId, UserDTO newImage) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User does not exist"));
+        user.setImage(HelperFunctions.setBase64(userId,newImage.getImage(),"user"));
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+
+
+
+    @Override
+    public User getSpecificUser(Integer userId) throws GeneralException{
+        User user =  userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User is not Found"));
+        user.setImage(HelperFunctions.getBase64(userId , "user"));
+        return user;
+    }
 
 
     @Override

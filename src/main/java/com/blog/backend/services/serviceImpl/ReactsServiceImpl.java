@@ -74,5 +74,19 @@ public class ReactsServiceImpl implements ReactsService {
         return reactRepository.findAllReactByPostId(postId).size();
     }
 
+    @Override
+    public ResponseEntity<?> removeReactSe(Integer user1Id, Integer postId) throws GeneralException {
+        User user = userRepository.findById(user1Id).orElseThrow(() -> new GeneralException(ErrorCode.USER_DOESNT_EXIST, "User does not exist"));
+        Post post = postRepository.findById(postId).orElseThrow(() -> new GeneralException(ErrorCode.POST_DOESNT_EXIST, "Post does not exist"));
+        ReactId reactId = new ReactId(user1Id,postId);
+        Optional<React> reactToCheck = reactRepository.findById(reactId);
+        if (reactToCheck.isEmpty()){
+            throw new GeneralException(ErrorCode.REACT_DOESNT_EXIST, "React does not exist");
+        }else {
+            reactRepository.delete(reactToCheck.get());
+            return new ResponseEntity<>("React deleted successfully", HttpStatus.OK);
+        }
+    }
+
 
 }

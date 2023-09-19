@@ -40,12 +40,12 @@ public class UserController {
         return userService.updateUser(userId, newUserDTO);
     }
 
-    //check
-//    @GetMapping("get/{user-id}")
-//    public User getSpecificUser(@PathVariable("user-id") Integer userId) throws GeneralException {
-//        return userService.getSpecificUser(userId);
-//
-//    }
+
+    @GetMapping("get/{user-id}")
+    public User getSpecificUser(@PathVariable("user-id") Integer userId) throws GeneralException {
+        return userService.getSpecificUser(userId);
+
+    }
 
 
     @GetMapping("get/all")
@@ -74,11 +74,11 @@ public class UserController {
 
 
 
-//    @PutMapping("updateImage/{user-id}")
-//    public ResponseEntity<?> updateImageByUserId(@PathVariable("user-id") Integer userId, @RequestBody UserDTO newImage){
-//        System.out.println(newImage);
-//        return userService.updateImageByUserId(userId, newImage);
-//    }
+    @PutMapping("updateImage/{user-id}")
+    public ResponseEntity<?> updateImageByUserId(@PathVariable("user-id") Integer userId, @RequestBody UserDTO newImage){
+        System.out.println(newImage);
+        return userService.updateImageByUserId(userId, newImage);
+    }
 
 }
 

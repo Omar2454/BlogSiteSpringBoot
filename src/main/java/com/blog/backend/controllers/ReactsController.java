@@ -40,4 +40,8 @@ public class ReactsController {
     public Integer getReactCountsByPostId(@PathVariable("post-id") Integer postId){
         return reactsService.getReactCountsByPostId(postId);
     }
+    @DeleteMapping ("remove/{userId}/{post-id}")
+    public ResponseEntity<?> removeReact(@PathVariable("userId") Integer user1Id,@PathVariable("post-id") Integer postId) throws GeneralException {
+        return reactsService.removeReactSe(user1Id, postId);
+    }
 }
