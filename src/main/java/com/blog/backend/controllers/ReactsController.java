@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("api/blog/post/reacts")
+@RequestMapping("api/post/reacts")
 public class ReactsController {
     private final ReactsService reactsService;
 

@@ -11,7 +11,7 @@ create table users
     updated_at   datetime(6)            null,
     phone_number varchar(20)            null,
     bio          varchar(100)           null,
-    image        longtext           null,
+    image        longtext               null,
     facebook     varchar(100)           null,
     constraint UK_6dotkott2kjsp8vw4d0m25fb7
         unique (email)
@@ -46,6 +46,8 @@ create table posts
     updated_at       datetime(6)    null,
     shared_post_id   int            null,
     user_id          int            not null,
+    numberOfReacts   int default 0       null,
+    numberOfComment int  default 0      null,
     constraint FK5lidm6cqbc7u4xhqpxm898qme
         foreign key (user_id) references users (user_id)
             on delete cascade,

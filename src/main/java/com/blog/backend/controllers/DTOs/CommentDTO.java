@@ -9,8 +9,8 @@ import lombok.*;
 @NoArgsConstructor
 public class CommentDTO {
     String commentText;
-    //foreign //TODO (required in addComment)
+
     int userId;
-    int postId;
+
 
 }

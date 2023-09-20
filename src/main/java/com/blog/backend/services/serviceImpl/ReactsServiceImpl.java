@@ -57,6 +57,7 @@ public class ReactsServiceImpl implements ReactsService {
                     .build();
             post.getReacts().add(react1);
             reactRepository.save(react1);
+            post.setNumberOfReacts(post.getReacts().size());
             postRepository.save(post);
 
 

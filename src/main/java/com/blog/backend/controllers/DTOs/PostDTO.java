@@ -17,12 +17,5 @@ public class PostDTO {
     String title;
     String content;
     String image;
-    User user;
-    LocalDateTime createdAt;
-    int numberOfReact;
-    int numberOfComment;
-    int isReact;
 
-    //foreign
-    int userId;
 }

@@ -5,6 +5,7 @@ import com.blog.backend.Serializers.ReactsSerializer;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 import lombok.*;
@@ -29,12 +30,15 @@ public class Post {
     private Integer id;
 
     @Column(name = "post_title", length = 1000)
+    @JsonProperty(value = "title")
     private String postTitle;
 
     @Column(name = "post_description", length = 10000)
+    @JsonProperty(value = "content")
     private String postDescription;
 
     @Column(name = "image_base")
+    @JsonProperty(value = "image")
     private String imageBase;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -68,5 +72,11 @@ public class Post {
     @JsonSerialize(using = ReactsSerializer.class)
     private Set<React> reacts = new LinkedHashSet<>();
 
+
+    @Column(name = "number_of_reacts")
+    private Integer numberOfReacts;
+
+    @Column(name = "number_of_comment")
+    private Integer numberOfComment;
 
 }
