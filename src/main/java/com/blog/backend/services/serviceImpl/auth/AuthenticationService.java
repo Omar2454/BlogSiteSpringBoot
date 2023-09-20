@@ -53,9 +53,10 @@ public class AuthenticationService {
                 if (user.isEmpty()){
                     User userToSave = buildUser(userDTO);
 
-                    userToSave.setPic(HelperFunctions.setBase64(userToSave.getId(), userDTO.getPic(),"user"));
+
 
                     userRepository.save(userToSave);
+                    userToSave.setPic(HelperFunctions.setBase64(userToSave.getId(), userDTO.getPic(),"user"));
 
                     var jwtToken= jwtService.generateToken(userToSave);
 
