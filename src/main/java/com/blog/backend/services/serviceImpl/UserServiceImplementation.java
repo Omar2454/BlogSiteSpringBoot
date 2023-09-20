@@ -107,6 +107,10 @@ public class UserServiceImplementation implements UserService {
                 Set<Friendship> friendships= user.get().getFriendships1();
                 for (Friendship friendship:
                     friendships ) {
+
+                    //upload image of friend by for each loop
+
+
                     listOfFriendsIds.add(friendship.getFriendId());
                 }
                 int page = pageable.getPageNumber();

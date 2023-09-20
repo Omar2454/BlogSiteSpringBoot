@@ -9,6 +9,7 @@ import com.blog.backend.repos.UserRepository;
 import com.blog.backend.security.config.JwtService;
 import com.blog.backend.security.responses.AuthenticationResponse;
 import com.blog.backend.utils.BlogUtils;
+import com.blog.backend.utils.HelperFunctions;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,6 +52,9 @@ public class AuthenticationService {
                 //if the email doesn't exist before
                 if (user.isEmpty()){
                     User userToSave = buildUser(userDTO);
+
+                    userToSave.setPic(HelperFunctions.setBase64(userToSave.getId(), userDTO.getPic(),"user"));
+
                     userRepository.save(userToSave);
 
                     var jwtToken= jwtService.generateToken(userToSave);
