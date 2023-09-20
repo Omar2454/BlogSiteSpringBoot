@@ -108,11 +108,12 @@ public class UserServiceImplementation implements UserService {
                 for (Friendship friendship:
                     friendships ) {
 
-                    //upload image of friend by for each loop
-
-
                     listOfFriendsIds.add(friendship.getFriendId());
                 }
+
+                friendsDto.forEach(f -> {
+                    f.setPic(HelperFunctions.getBase64(f.getId(), "user"));
+                });
                 int page = pageable.getPageNumber();
                 int size = pageable.getPageSize();
                 int startIndex = page * size;
