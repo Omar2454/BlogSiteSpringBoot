@@ -31,7 +31,7 @@ public class CommentServiceImplementation implements CommentService {
 
     @Override
     public Comment addComment(CommentDTO commentDTO, Integer postId) {
-        User user = userRepository.findById(commentDTO.getUserId()).orElseThrow(() -> new EntityNotFoundException("Comment ID not Found"));
+        User user = userRepository.findById(commentDTO.getUserId()).orElseThrow(() -> new EntityNotFoundException("User ID not Found"));
         Post post = postRepository.findById(postId).orElseThrow(() -> new EntityNotFoundException("Post ID not Found"));
         Comment comment = Comment.builder()
                 .comment_text(commentDTO.getCommentText())

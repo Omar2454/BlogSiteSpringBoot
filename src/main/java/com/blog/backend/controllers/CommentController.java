@@ -10,19 +10,21 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/blog/comment")
+@RequestMapping("api/comment")
 public class CommentController {
     @Autowired
     private CommentService commentService;
 
     //(naming of the frontend)
 
+    //(done)
     @PostMapping("add-comment/{postID}")
     public Comment addComment(@RequestBody CommentDTO commentDTO, @PathVariable("postID") Integer postId){
          return commentService.addComment(commentDTO, postId);
     }
 
 
+    //(done)
     @DeleteMapping("delete-comment/{commentId}/{userId}")
     public ResponseEntity<String> deleteComment(@PathVariable("commentId") Integer commentId,@PathVariable("userId") Integer userId) {
 return commentService.deleteComment(commentId , userId);
@@ -45,6 +47,7 @@ return commentService.deleteComment(commentId , userId);
 
 
 
+    //(done)
 
     @GetMapping("all-comment/{postID}")
     public List<Comment> getAllCommentByPostId(@PathVariable("postID") Integer postId){
@@ -52,6 +55,7 @@ return commentService.deleteComment(commentId , userId);
     }
 
 
+    //(done)
     @GetMapping("all-comment-count/{postID}")
     public Integer getAllCommentByPostIdCount(@PathVariable("postID") Integer postId) {
     return commentService.getAllCommentByPostIdCount(postId);

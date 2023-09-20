@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("api/blog/post")
+@RequestMapping("api/post")
 public class PostController {
 
     @Autowired
@@ -20,13 +20,12 @@ public class PostController {
 
 
 
-    @PostMapping("add")
-    public Post addPost(@RequestBody PostDTO postDTO) {
-        return postService.addPost(postDTO);
+    //(done)
+    @PostMapping("add-post/{userId}")
+    public Post addPost(@RequestBody PostDTO postDTO , @PathVariable("userId") Integer userId) {
+        return postService.addPost(postDTO,userId);
 
     }
-
-
 
     @PostMapping("share/{original-post-id}/{user-who-want-to-share}")
     public Post sharePost(@PathVariable("original-post-id") Integer originalPostId,@PathVariable("user-who-want-to-share") Integer userWhoWantToShare , @RequestBody PostDTO sharePostDTO) {
@@ -36,14 +35,14 @@ public class PostController {
 
 
     
-    @DeleteMapping("delete/{post-id}")
-    public ResponseEntity<String> deletePost(@PathVariable("post-id") Integer postId) {
+    @DeleteMapping("delete-post/{postId}")
+    public ResponseEntity<String> deletePost(@PathVariable("postId") Integer postId) {
         return postService.deletePost(postId);
     }
 
     
-    @PutMapping("update/{post-id}")
-    public Post updatePost(@PathVariable("post-id") Integer postId, @RequestBody PostDTO newPostDTO) {
+    @PutMapping("update-post/{postId}")
+    public Post updatePost(@PathVariable("postId") Integer postId, @RequestBody PostDTO newPostDTO) {
         return postService.updatePost(postId, newPostDTO);
     }
 
@@ -59,9 +58,17 @@ public class PostController {
     }
 
 
-    @GetMapping("get/all")
+    @GetMapping("all-posts")
     public Page<Post> getAllPost(Pageable pageable) {
         return postService.getAllPosts(pageable);
     }
+
+
+    //(done)
+    @GetMapping("posts/{userId}")
+    public Page<Post> getAllPostByUserId(@PathVariable("userId") Integer userId, Pageable pageable){
+        return postService.getAllPostByUserId(userId,pageable);
+    }
+
 
 }

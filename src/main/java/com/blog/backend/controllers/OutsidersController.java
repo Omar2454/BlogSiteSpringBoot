@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin("http://localhost:4200")
 @RestController
 @AllArgsConstructor
-@RequestMapping("api/outsiders")
+@RequestMapping("api/user")
 public class OutsidersController {
     private final AuthenticationService authenticationService;
 
@@ -27,7 +27,7 @@ public class OutsidersController {
 
 
 
-    @PostMapping("authenticate")
+    @PostMapping("login")
     public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest request) {
         try {
             return authenticationService.authenticate(request);
@@ -38,7 +38,7 @@ public class OutsidersController {
 
     }
 
-    @PostMapping("register")
+    @PostMapping("add-user")
     public ResponseEntity<?> register(@RequestBody UserDTO userDTO) {
         try {
             return authenticationService.register(userDTO);

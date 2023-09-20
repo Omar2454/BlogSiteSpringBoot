@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("api/blog/user")
+@RequestMapping("api/user")
 public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
@@ -35,14 +35,14 @@ public class UserController {
 
 
 
-    @PutMapping("update/{user-id}")
-    public ResponseEntity<?> updateUser(@PathVariable("user-id") Integer userId, @RequestBody UserDTO newUserDTO) throws GeneralException {
+    @PutMapping("update-user/{id}")
+    public ResponseEntity<?> updateUser(@PathVariable("id") Integer userId, @RequestBody UserDTO newUserDTO) throws GeneralException {
         return userService.updateUser(userId, newUserDTO);
     }
 
 
-    @GetMapping("get/{user-id}")
-    public User getSpecificUser(@PathVariable("user-id") Integer userId) throws GeneralException {
+    @GetMapping("get-user/{id}")
+    public User getSpecificUser(@PathVariable("id") Integer userId) throws GeneralException {
         return userService.getSpecificUser(userId);
 
     }
@@ -55,8 +55,8 @@ public class UserController {
     }
 
 
-    @GetMapping("get/friends/{userId}")
-    public ResponseEntity<?> getAllFriends(@PathVariable("userId") Integer userId, Pageable pageable) {
+    @GetMapping("get-friends/{id}")
+    public ResponseEntity<?> getAllFriends(@PathVariable("id") Integer userId, Pageable pageable) {
         try {
             ResponseEntity<?> response = userService.getAllFriends(userId, pageable);
 
@@ -74,8 +74,8 @@ public class UserController {
 
 
 
-    @PutMapping("updateImage/{user-id}")
-    public ResponseEntity<?> updateImageByUserId(@PathVariable("user-id") Integer userId, @RequestBody UserDTO newImage){
+    @PutMapping("upload-image/{id}")
+    public ResponseEntity<?> updateImageByUserId(@PathVariable("id") Integer userId, @RequestBody UserDTO newImage){
         System.out.println(newImage);
         return userService.updateImageByUserId(userId, newImage);
     }

@@ -1,6 +1,7 @@
 package com.blog.backend.controllers.DTOs;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,11 +19,11 @@ public class UserDTO {
     private String password;
     private String email;
     private String bio;
-    private String phoneNumber;
+    private String phone;
     private String facebookUsername;
 
     //image Profile
-    private String image;
+    private String pic;
 
 
 

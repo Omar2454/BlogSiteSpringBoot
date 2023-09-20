@@ -47,7 +47,7 @@ public class User implements UserDetails {
     private String password;
 
     @Column(name = "image")
-    private String image;
+    private String pic;
 
     @Column(name = "phone_number", length = 20)
     private String phoneNumber;

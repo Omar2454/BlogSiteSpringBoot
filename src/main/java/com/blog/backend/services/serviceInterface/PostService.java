@@ -12,7 +12,7 @@ import java.util.Optional;
 
 public interface PostService {
 
-   Post addPost(PostDTO postDTO);
+   Post addPost(PostDTO postDTO , Integer userId);
 
 
    Post sharePost(Integer originalPostId, Integer userWhoWantToShare , PostDTO sharePostDTO);

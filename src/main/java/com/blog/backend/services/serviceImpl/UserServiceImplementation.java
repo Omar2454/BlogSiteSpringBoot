@@ -65,7 +65,7 @@ public class UserServiceImplementation implements UserService {
         user.setLastName(newUserDTO.getName());
         user.setEmail(newUserDTO.getEmail());
         user.setUpdatedAt(LocalDateTime.now());
-        user.setImage(newUserDTO.getImage());
+        user.setPic(newUserDTO.getPic());
         userRepository.save(user);
         return new ResponseEntity<>(user,HttpStatus.OK);
     }
@@ -74,7 +74,7 @@ public class UserServiceImplementation implements UserService {
     @Override
     public ResponseEntity<?> updateImageByUserId(Integer userId, UserDTO newImage) {
         User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User does not exist"));
-        user.setImage(HelperFunctions.setBase64(userId,newImage.getImage(),"user"));
+        user.setPic(HelperFunctions.setBase64(userId,newImage.getPic(),"user"));
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
@@ -84,7 +84,7 @@ public class UserServiceImplementation implements UserService {
     @Override
     public User getSpecificUser(Integer userId) throws GeneralException{
         User user =  userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User is not Found"));
-        user.setImage(HelperFunctions.getBase64(userId , "user"));
+        user.setPic(HelperFunctions.getBase64(userId , "user"));
         return user;
     }
 
@@ -120,7 +120,7 @@ public class UserServiceImplementation implements UserService {
                     FriendDTO friendDTO = FriendDTO.builder()
                             .id(friend.getId())
                             .name(friend.getFirstName())
-                            .pic(friend.getImage())
+                            .pic(friend.getPic())
                             .build();
                     friendsDto.add(friendDTO);
                 }

@@ -31,18 +31,22 @@ public class PostServiceImplementation implements PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
 
+
+    //(for future after intern)
     @Override
-    public Post addPost(PostDTO postDTO) {
-        User user = userRepository.findById(postDTO.getUserId()).orElseThrow(() -> new EntityNotFoundException("User Not found"));
+    public Post addPost(PostDTO postDTO, Integer userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User Not found"));
         Post post = Post.builder()
-                .postTitle(postDTO.getPostTitle())
-                .postDescription(postDTO.getPostDescription())
-                .imageBase(postDTO.getImageBase())
+                .postTitle(postDTO.getTitle())
+                .postDescription(postDTO.getContent())
+                .imageBase(postDTO.getImage())
                 .createdAt(LocalDateTime.now())
                 .user(user)
                 .build();
         return postRepository.save(post);
     }
+
+
 
 
 
@@ -69,8 +73,8 @@ public class PostServiceImplementation implements PostService {
         }
 
         Post sharedPost = Post.builder()
-                .postTitle(sharePostDTO.getPostTitle())  //which you are typing it in request body
-                .postDescription(sharePostDTO.getPostDescription())  //which you are typing it in request body
+                .postTitle(sharePostDTO.getTitle())  //which you are typing it in request body
+                .postDescription(sharePostDTO.getContent())  //which you are typing it in request body
                 .imageBase(originalPost.getImageBase())  // Use the original post's image
                 .createdAt(LocalDateTime.now())
                 .user(user)  // Set the user id who is sharing the post
@@ -133,18 +137,18 @@ public class PostServiceImplementation implements PostService {
 
     // Helper method to update a shared post
     private void updateSharedPost(Post sharedPost, PostDTO newPostDTO) {
-        sharedPost.setPostTitle(newPostDTO.getPostTitle());
-        sharedPost.setPostDescription(newPostDTO.getPostDescription());
-        sharedPost.setImageBase(newPostDTO.getImageBase());
+        sharedPost.setPostTitle(newPostDTO.getTitle());
+        sharedPost.setPostDescription(newPostDTO.getContent());
+        sharedPost.setImageBase(newPostDTO.getImage());
         sharedPost.setUpdatedAt(LocalDateTime.now());
     }
 
     // Helper method to update an original post and its shared posts
     private void updateOriginalPostAndSharedPosts(Post originalPost, PostDTO newPostDTO) {
         // Update the original post
-        originalPost.setPostTitle(newPostDTO.getPostTitle());
-        originalPost.setPostDescription(newPostDTO.getPostDescription());
-        originalPost.setImageBase(newPostDTO.getImageBase());
+        originalPost.setPostTitle(newPostDTO.getTitle());
+        originalPost.setPostDescription(newPostDTO.getContent());
+        originalPost.setImageBase(newPostDTO.getImage());
         originalPost.setUpdatedAt(LocalDateTime.now());
 
         // Update the shared posts (if any)
