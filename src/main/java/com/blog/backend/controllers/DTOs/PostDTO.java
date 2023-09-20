@@ -22,7 +22,7 @@ public class PostDTO {
     int numberOfReact;
     int numberOfComment;
     int isReact;
-    
+
     //foreign
     int userId;
 }
