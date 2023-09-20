@@ -46,8 +46,8 @@ create table posts
     updated_at       datetime(6)    null,
     shared_post_id   int            null,
     user_id          int            not null,
-    numberOfReacts   int default 0       null,
-    numberOfComment int  default 0      null,
+    number_of_reacts   int default 0       null,
+    number_of_comment int  default 0      null,
     constraint FK5lidm6cqbc7u4xhqpxm898qme
         foreign key (user_id) references users (user_id)
             on delete cascade,
