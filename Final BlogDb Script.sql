@@ -11,7 +11,7 @@ create table users
     updated_at   datetime(6)            null,
     phone_number varchar(20)            null,
     bio          varchar(100)           null,
-    image        longtext               null,
+    image        varchar(255)           null,
     facebook     varchar(100)           null,
     constraint UK_6dotkott2kjsp8vw4d0m25fb7
         unique (email)
@@ -37,17 +37,17 @@ create table friendships
 
 create table posts
 (
-    post_id          int auto_increment
+    post_id           int auto_increment
         primary key,
-    created_at       datetime(6)    null,
-    image_base       varchar(255)   null,
-    post_description varchar(10000) null,
-    post_title       varchar(1000)  null,
-    updated_at       datetime(6)    null,
-    shared_post_id   int            null,
-    user_id          int            not null,
-    number_of_reacts   int default 0       null,
-    number_of_comment int  default 0      null,
+    created_at        datetime(6)    null,
+    image_base        varchar(255)   null,
+    post_description  varchar(10000) null,
+    post_title        varchar(1000)  null,
+    updated_at        datetime(6)    null,
+    shared_post_id    int            null,
+    user_id           int            not null,
+    number_of_comment int default 0  null,
+    number_of_reacts  int default 0  null,
     constraint FK5lidm6cqbc7u4xhqpxm898qme
         foreign key (user_id) references users (user_id)
             on delete cascade,
@@ -74,9 +74,9 @@ create table comments
 
 create table reacts
 (
-    post  int                            not null,
-    user  int                            not null,
-    emoji enum ('NOTHING', 'LIKE', 'LOVE') not null,
+    post  int     not null,
+    user  int     not null,
+    emoji tinyint not null,
     primary key (post, user),
     constraint FK6fpuwxwedqxn4dg7cp2rpua7i
         foreign key (user) references users (user_id)
@@ -85,5 +85,4 @@ create table reacts
         foreign key (post) references posts (post_id)
             on delete cascade
 );
-
 
