@@ -78,6 +78,9 @@ public class AuthenticationService {
     }
 
     private User buildUser(UserDTO userDTO) {
+        User user = new User();
+        user.setEmail(user.getEmail());
+
         return User.builder()
                 .firstName(userDTO.getName())
                 .lastName(userDTO.getName())
