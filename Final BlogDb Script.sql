@@ -48,6 +48,7 @@ create table posts
     user_id           int            not null,
     number_of_comment int default 0  null,
     number_of_reacts  int default 0  null,
+    privacy           enum ('ONLYMY', 'FRIENDS', 'PUBLIC') default 'PUBLIC' null,
     constraint FK5lidm6cqbc7u4xhqpxm898qme
         foreign key (user_id) references users (user_id)
             on delete cascade,
