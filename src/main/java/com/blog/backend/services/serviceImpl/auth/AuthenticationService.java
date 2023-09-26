@@ -56,7 +56,7 @@ public class AuthenticationService {
 
 
                     userRepository.save(userToSave);
-                    userToSave.setPic(HelperFunctions.setBase64(userToSave.getId(), userDTO.getPic(),"user"));
+//                    userToSave.setPic(HelperFunctions.setBase64(userToSave.getId(), userDTO.getPic(),"user"));
 
                     var jwtToken= jwtService.generateToken(userToSave);
 
@@ -83,13 +83,9 @@ public class AuthenticationService {
                 .lastName(userDTO.getName())
                 .email(userDTO.getEmail())
                 .password(passwordEncoder.encode(userDTO.getPassword()))
-                .bio(userDTO.getBio())
-                .facebook(userDTO.getFacebookUsername())
                 .phoneNumber(userDTO.getPhone())
-                .pic(userDTO.getPic())
                 .roles(Role.USER)
                 .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
                 .build();
     }
 
@@ -119,9 +115,10 @@ public class AuthenticationService {
                 var jwtToken= jwtService.generateToken(user);
                 AuthenticationResponse authenticationResponse=AuthenticationResponse.builder()
                         .token(jwtToken)
+                        .user(user)
                         .build();
 
-                return new ResponseEntity<>(user,HttpStatus.OK);
+                return new ResponseEntity<>(authenticationResponse,HttpStatus.OK);
             }
         } catch (AuthenticationException e) {
             logger.log(Level.SEVERE, "An error occurred", e);

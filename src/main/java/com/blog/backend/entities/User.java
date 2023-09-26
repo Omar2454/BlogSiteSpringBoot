@@ -47,6 +47,7 @@ public class User implements UserDetails {
     private String password;
 
     @Column(name = "image")
+    @JsonProperty(value = "image")
     private String pic;
 
     @Column(name = "phone_number", length = 20)
@@ -56,6 +57,7 @@ public class User implements UserDetails {
     private String bio;
 
     @Column(name = "facebook", length = 100)
+    @JsonProperty(value = "facebookUrl")
     private String facebook;
 
 
@@ -75,17 +77,19 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user")
     @JsonManagedReference
     @JsonSerialize(using = CommentSerializer.class)
+    @JsonIgnore
     private Set<Comment> comments = new LinkedHashSet<>();
 
 
     @OneToMany(mappedBy = "user")
     @JsonSerialize(using = PostSerializer.class)
-
+    @JsonIgnore
     private Set<Post> posts = new LinkedHashSet<>();
 
 
     @OneToMany(mappedBy = "userID1")
     @JsonManagedReference
+    @JsonIgnore
     private Set<Friendship> friendships1;
 
     @OneToMany(mappedBy = "userID2")

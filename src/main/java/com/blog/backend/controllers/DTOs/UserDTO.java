@@ -18,12 +18,8 @@ public class UserDTO {
     private String name;
     private String password;
     private String email;
-    private String bio;
     private String phone;
-    private String facebookUsername;
 
-    //image Profile
-    private String pic;
 
 
 
