@@ -74,7 +74,7 @@ public class UserServiceImplementation implements UserService {
     @Override
     public ResponseEntity<?> updateImageByUserId(Integer userId, UserDTO newImage) {
         User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User does not exist"));
-//        user.setPic(HelperFunctions.setBase64(userId,newImage.getPic(),"user"));
+        user.setPic(newImage.getImage());
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 

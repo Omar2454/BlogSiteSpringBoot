@@ -39,6 +39,7 @@ public class PostServiceImplementation implements PostService {
         Post post = Post.builder()
                 .postTitle(postDTO.getTitle())
                 .postDescription(postDTO.getContent())
+                .privacy(postDTO.getPrivacy())
                 .imageBase(postDTO.getImage())
                 .createdAt(LocalDateTime.now())
                 .user(user)

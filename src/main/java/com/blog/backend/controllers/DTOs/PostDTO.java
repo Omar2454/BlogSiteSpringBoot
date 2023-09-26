@@ -1,6 +1,7 @@
 package com.blog.backend.controllers.DTOs;
 
 import com.blog.backend.entities.User;
+import com.blog.backend.entities.enums.Privacy;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,5 +18,7 @@ public class PostDTO {
     String title;
     String content;
     String image;
+    Privacy privacy;
+
 
 }
