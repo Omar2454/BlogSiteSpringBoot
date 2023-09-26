@@ -42,8 +42,6 @@ public class HelperFunctions {
         }catch(FileAlreadyExistsException e){
             System.out.println("File exists");
             return "";
-        }catch (NoSuchFileException e){
-
         }catch (IOException e){
             System.out.println("An error occurred");
             e.printStackTrace();
