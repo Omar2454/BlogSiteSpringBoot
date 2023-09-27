@@ -9,7 +9,7 @@ public class HelperFunctions {
     public static String getBase64(int userId, String type){
         String Base64Image="";
         try{
-            Path path = Path.of("src/resources/uploads/"+type+"/"+Integer.toString(userId) + ".txt");
+            Path path = Path.of("src/main/resources/uploads/"+type+"/"+Integer.toString(userId) + ".txt");
 
             if(Files.exists(path)){
                 String content = Files.readString(path);
@@ -28,7 +28,7 @@ public class HelperFunctions {
 
     public static String setBase64(int userId , String pic , String type){
         try{
-            Path path = Path.of("src/resources/uploads/"+type+"/");
+            Path path = Path.of("src/main/resources/uploads/"+type+"/");
             if(!Files.exists(path)){
                 Files.createDirectories(path);
             }
