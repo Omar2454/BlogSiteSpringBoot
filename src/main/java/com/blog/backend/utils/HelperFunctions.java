@@ -10,7 +10,7 @@ public class HelperFunctions {
         String Base64Image="";
         try{
 
-            Path path = Path.of("src/main/resources/uploads/"+type+"/"+Integer.toString(userId) + ".txt");
+            Path path = Path.of("src/main/resources/uploads/"+type+"/"+Integer.toString(id) + ".txt");
 
 
             if(Files.exists(path)){
