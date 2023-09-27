@@ -11,7 +11,7 @@ create table users
     updated_at   datetime(6)            null,
     phone_number varchar(20)            null,
     bio          varchar(100)           null,
-    image        varchar(255)           null,
+    image        LONGTEXT           null,
     facebook     varchar(100)           null,
     constraint UK_6dotkott2kjsp8vw4d0m25fb7
         unique (email)
@@ -40,7 +40,7 @@ create table posts
     post_id           int auto_increment
         primary key,
     created_at        datetime(6)    null,
-    image_base        varchar(255)   null,
+    image_base        LONGTEXT   null,
     post_description  varchar(10000) null,
     post_title        varchar(1000)  null,
     updated_at        datetime(6)    null,
@@ -48,6 +48,7 @@ create table posts
     user_id           int            not null,
     number_of_comment int default 0  null,
     number_of_reacts  int default 0  null,
+    privacy           enum ('ONLYMY', 'FRIENDS', 'PUBLIC') default 'PUBLIC' null,
     constraint FK5lidm6cqbc7u4xhqpxm898qme
         foreign key (user_id) references users (user_id)
             on delete cascade,

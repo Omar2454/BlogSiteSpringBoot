@@ -2,6 +2,8 @@ package com.blog.backend.entities;
 
 import com.blog.backend.Serializers.CommentSerializer;
 import com.blog.backend.Serializers.ReactsSerializer;
+import com.blog.backend.entities.enums.Privacy;
+import com.blog.backend.entities.enums.Role;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -78,5 +80,9 @@ public class Post {
 
     @Column(name = "number_of_comment")
     private Integer numberOfComment;
+
+    @Column(name = "privacy", nullable = true, length = 30)
+    @JsonProperty("privacy")
+    private Privacy privacy;
 
 }
