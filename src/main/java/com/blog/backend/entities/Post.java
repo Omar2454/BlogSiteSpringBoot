@@ -39,7 +39,6 @@ public class Post {
 
     @Column(name = "image_base")
     @JsonProperty(value = "image")
-    @JsonIgnore
     private String imageBase;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
