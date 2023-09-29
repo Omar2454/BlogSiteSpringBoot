@@ -1,6 +1,7 @@
 package com.blog.backend.controllers;
 
 import com.blog.backend.controllers.DTOs.PostDTO;
+import com.blog.backend.controllers.exceptions.GeneralException;
 import com.blog.backend.entities.Post;
 import com.blog.backend.services.serviceInterface.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class PostController {
 
     }
 
-    @PostMapping("share/{original-post-id}/{user-who-want-to-share}")
+    @PostMapping("share/{user-who-want-to-share}/{original-post-id}")
     public Post sharePost(@PathVariable("original-post-id") Integer originalPostId,@PathVariable("user-who-want-to-share") Integer userWhoWantToShare , @RequestBody PostDTO sharePostDTO) {
         return postService.sharePost(originalPostId, userWhoWantToShare, sharePostDTO);
     }
@@ -52,23 +53,23 @@ public class PostController {
         return postService.getPostByPostId(postId);
     }
 
-    @GetMapping("get/postsByUserId/{user-id}")
-    public Page<Post> getPostByUserId(@PathVariable("user-id") Integer userId, Pageable pageable) {
-        return postService.getAllPostByUserId(userId, pageable);
+    @GetMapping("get/postsByUserId/{visitor-id}/{user-id}")
+    public Page<Post> getPostByUserId(@PathVariable("visitor-id") Integer visitorId,@PathVariable("user-id") Integer userId, Pageable pageable) throws GeneralException {
+        return postService.getAllPostByUserId(visitorId, userId, pageable);
     }
 
 
-    @GetMapping("all-posts")
-    public Page<Post> getAllPost(Pageable pageable) {
-        return postService.getAllPosts(pageable);
+    @GetMapping("all-posts/{user-id}")
+    public Page<Post> getAllPost(Pageable pageable,@PathVariable("user-id") Integer userId) throws GeneralException {
+        return postService.getAllPosts(pageable,userId);
     }
 
 
     //(done)
-    @GetMapping("posts/{userId}")
-    public Page<Post> getAllPostByUserId(@PathVariable("userId") Integer userId, Pageable pageable){
-        return postService.getAllPostByUserId(userId,pageable);
-    }
+//    @GetMapping("posts/{userId}")
+//    public Page<Post> getAllPostByUserId(@PathVariable("userId") Integer userId, Pageable pageable){
+//        return postService.getAllPostByUserId(userId,pageable);
+//    }
 
 
 }

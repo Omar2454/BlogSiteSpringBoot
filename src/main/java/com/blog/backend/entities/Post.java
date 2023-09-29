@@ -3,11 +3,9 @@ package com.blog.backend.entities;
 import com.blog.backend.Serializers.CommentSerializer;
 import com.blog.backend.Serializers.ReactsSerializer;
 import com.blog.backend.entities.enums.Privacy;
+import com.blog.backend.entities.enums.Reacts;
 import com.blog.backend.entities.enums.Role;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 import lombok.*;
@@ -41,6 +39,7 @@ public class Post {
 
     @Column(name = "image_base")
     @JsonProperty(value = "image")
+    @JsonIgnore
     private String imageBase;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -83,6 +82,12 @@ public class Post {
 
     @Column(name = "privacy", nullable = true, length = 30)
     @JsonProperty("privacy")
+    @Enumerated(EnumType.STRING)
+    @JsonFormat(shape = JsonFormat.Shape.NUMBER)
     private Privacy privacy;
+
+
+    @Transient
+    private Integer isReact;
 
 }

@@ -1,6 +1,7 @@
 package com.blog.backend.services.serviceInterface;
 
 import com.blog.backend.controllers.DTOs.PostDTO;
+import com.blog.backend.controllers.exceptions.GeneralException;
 import com.blog.backend.entities.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,12 +25,12 @@ public interface PostService {
    Optional<Post> getPostByPostId(Integer postId);
 
 
-   Page<Post> getAllPosts(Pageable pageable);
+   Page<Post> getAllPosts(Pageable pageable,Integer userId) throws GeneralException;
 
    Integer getPostCount();
 
 
-   Page<Post> getAllPostByUserId(Integer userId, Pageable pageable);
+   Page<Post> getAllPostByUserId(Integer visitorId,Integer userId, Pageable pageable) throws GeneralException;
 
 
 

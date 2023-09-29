@@ -1,8 +1,13 @@
 package com.blog.backend.services.serviceImpl;
 
 import com.blog.backend.controllers.DTOs.PostDTO;
+import com.blog.backend.controllers.exceptions.ErrorCode;
+import com.blog.backend.controllers.exceptions.GeneralException;
+import com.blog.backend.entities.Friendship;
 import com.blog.backend.entities.Post;
+import com.blog.backend.entities.React;
 import com.blog.backend.entities.User;
+import com.blog.backend.entities.enums.Privacy;
 import com.blog.backend.repos.PostRepository;
 import com.blog.backend.repos.UserRepository;
 import com.blog.backend.services.serviceInterface.PostService;
@@ -12,6 +17,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import org.springframework.http.HttpStatus;
@@ -19,8 +26,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -166,15 +175,108 @@ public class PostServiceImplementation implements PostService {
 
     }
 
-    public Page<Post> getAllPostByUserId(Integer userId, Pageable pageable) {
-        return postRepository.findAllByUserId(userId, pageable);
+    public Page<Post> getAllPostByUserId(Integer visitedId,Integer userId, Pageable pageable) throws GeneralException {
+        if (visitedId.equals(userId)){
+            return postRepository.findAllByUserId(userId, pageable);
+        }else {
+            User user = userRepository.findById(visitedId).orElseThrow(()->new GeneralException(ErrorCode.USER_DOESNT_EXIST,"User does not exist"));
+            Set<Friendship> friendships = user.getFriendships1();
+            List<Integer>friendsIds = new ArrayList<>();
+            List<Post> allPosts = new ArrayList<>();
+            if (!friendships.isEmpty()) {
+                for (Friendship friendship:
+                        friendships) {
+                    friendsIds.add(friendship.getFriendId());
+                }
+                if (friendsIds.contains(userId)){
+
+                    allPosts.addAll(postRepository.findPostsByUserAndPrivacy(user,Privacy.FRIENDS));
+                }
+            }
+            List<Post> publicPosts = postRepository.findPostsByUserAndPrivacy(user,Privacy.PUBLIC);
+            allPosts.addAll(publicPosts);
+            setIsReact(userId, allPosts);
+            int pageSize = pageable.getPageSize();
+            int currentPage = pageable.getPageNumber();
+            int startItem = currentPage * pageSize;
+
+            List<Post> pagedAllPosts;
+
+            if (allPosts.size() < startItem) {
+                pagedAllPosts = List.of(); // Return an empty list for out of bounds pages
+            } else {
+                int toIndex = Math.min(startItem + pageSize, allPosts.size());
+                pagedAllPosts = allPosts.subList(startItem, toIndex);
+            }
+
+            return new PageImpl<>(pagedAllPosts, PageRequest.of(currentPage, pageSize), allPosts.size());
+
+        }
+
     }
 
 
 
     @Override
-    public Page<Post> getAllPosts(Pageable pageable) {
-        return postRepository.findAll(pageable);
+    public Page<Post> getAllPosts(Pageable pageable,Integer userId) throws GeneralException {
+        User user = userRepository.findById(userId).orElseThrow(()->new GeneralException(ErrorCode.USER_DOESNT_EXIST,"User does not exist"));
+
+        Set<Friendship> friendships = user.getFriendships1();
+        List<Integer>friendsIds = new ArrayList<>();
+        List<Post> allPosts = new ArrayList<>();
+        if (!friendships.isEmpty()) {
+            for (Friendship friendship:
+                    friendships) {
+                friendsIds.add(friendship.getFriendId());
+            }
+            for (Integer friendId:
+                    friendsIds) {
+                List<Post> posts =postRepository.findAllByUserId(friendId);
+                for (Post post:
+                     posts) {
+                    if (post.getPrivacy().equals(Privacy.FRIENDS)){
+                        allPosts.add(post);//friends posts
+                    }
+                }
+            }
+        }
+
+
+
+        List<Post> publicPosts = postRepository.findPostsByPrivacyIs(Privacy.PUBLIC);
+
+        allPosts.addAll(postRepository.findAllByUserId(userId));//private posts
+        allPosts.addAll(publicPosts); //public posts
+        setIsReact(userId, allPosts);
+        int pageSize = pageable.getPageSize();
+        int currentPage = pageable.getPageNumber();
+        int startItem = currentPage * pageSize;
+
+        List<Post> pagedAllPosts;
+
+        if (allPosts.size() < startItem) {
+            pagedAllPosts = List.of(); // Return an empty list for out of bounds pages
+        } else {
+            int toIndex = Math.min(startItem + pageSize, allPosts.size());
+            pagedAllPosts = allPosts.subList(startItem, toIndex);
+        }
+
+        return new PageImpl<>(pagedAllPosts, PageRequest.of(currentPage, pageSize), allPosts.size());
+
+
+    }
+
+    private static void setIsReact(Integer userId, List<Post> allPosts) {
+        for (Post post:
+                allPosts) {
+            Set<React> reacts = post.getReacts();
+            for (React react:
+                 reacts) {
+                if (react.getUser().getId().equals(userId)){
+                    post.setIsReact(react.getEmoji().ordinal());
+                }
+            }
+        }
     }
 
     @Override

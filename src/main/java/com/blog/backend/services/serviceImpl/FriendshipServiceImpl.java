@@ -100,11 +100,11 @@ public class FriendshipServiceImpl implements FriendshipInterface {
                             friendship2.get().setStatus(ACCEPTED);
                             friendshipRepository.save(friendship1.get());
                             friendshipRepository.save(friendship2.get());
-                            return BlogUtils.getResponseEntityWithDecision(sender1.get().getFirstName() + "'s Friend Request Accepted By " + receiver1.get().getFirstName(), decision , HttpStatus.OK);
+                            return BlogUtils.getResponseEntityWithDecision(sender1.get().getFirstName() + "'s Friend Request Accepted By " + receiver1.get().getFirstName(), true , HttpStatus.OK);
                         } else {
                             friendshipRepository.delete(friendship1.get());
                             friendshipRepository.delete(friendship2.get());
-                            return BlogUtils.getResponseEntityWithDecision(sender1.get().getFirstName() + "'s Friend Request Rejected By " + receiver1.get().getFirstName() , decision, HttpStatus.OK);
+                            return BlogUtils.getResponseEntityWithDecision(sender1.get().getFirstName() + "'s Friend Request Rejected By " + receiver1.get().getFirstName() , true, HttpStatus.OK);
                         }
                     }
                 }

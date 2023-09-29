@@ -9,9 +9,9 @@ public class BlogUtils {
 
     }
 
-    public static ResponseEntity<String> getResponseEntityWithDecision(String responseMessage , boolean decision, HttpStatus httpStatus){
+    public static ResponseEntity<String> getResponseEntityWithDecision(String responseMessage , boolean status, HttpStatus httpStatus){
         return new ResponseEntity<String>
-                ("{\n \"message\":\""+responseMessage+"\", \n \"status\":\""+decision+"\"\n}", httpStatus);
+                ("{\n \"message\":\""+responseMessage+"\", \n \"status\":\""+status+"\"\n}", httpStatus);
     }
 
 

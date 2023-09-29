@@ -11,7 +11,10 @@ public enum ErrorCode {
     SOMETHING_WENT_WRONG("5"),
     REACT_ALREADY_EXISTS("6"),
     FILE_DELETION_FAILED("7"),
-    REACT_DOESNT_EXIST("7")
+    REACT_DOESNT_EXIST("8"),
+    INVALID_PASSWORD("9"),
+    INVALID_EMAIL("10")
+
 
     ;
 
