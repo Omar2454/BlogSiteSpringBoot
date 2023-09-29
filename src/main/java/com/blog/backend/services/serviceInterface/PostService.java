@@ -13,24 +13,24 @@ import java.util.Optional;
 
 public interface PostService {
 
-   Post addPost(PostDTO postDTO , Integer userId);
+   ResponseEntity<?> addPost(PostDTO postDTO , Integer userId);
 
 
-   Post sharePost(Integer originalPostId, Integer userWhoWantToShare , PostDTO sharePostDTO);
+   ResponseEntity<?> sharePost(Integer originalPostId, Integer userWhoWantToShare , PostDTO sharePostDTO);
 
-   ResponseEntity<String> deletePost(Integer postId);
+   ResponseEntity<?> deletePost(Integer postId);
 
-   Post updatePost(Integer postId , PostDTO newPostDTO);
+   ResponseEntity<?> updatePost(Integer postId , PostDTO newPostDTO);
 
-   Optional<Post> getPostByPostId(Integer postId);
+   ResponseEntity<?> getPostByPostId(Integer postId);
 
 
-   Page<Post> getAllPosts(Pageable pageable,Integer userId) throws GeneralException;
+   ResponseEntity<?> getAllPosts(Pageable pageable,Integer userId) throws GeneralException;
 
    Integer getPostCount();
 
 
-   Page<Post> getAllPostByUserId(Integer visitorId,Integer userId, Pageable pageable) throws GeneralException;
+   ResponseEntity<?> getAllPostByUserId(Integer visitorId,Integer userId, Pageable pageable) throws GeneralException;
 
 
 

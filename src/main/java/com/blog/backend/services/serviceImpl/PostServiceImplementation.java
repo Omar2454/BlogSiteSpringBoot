@@ -11,17 +11,15 @@ import com.blog.backend.entities.enums.Privacy;
 import com.blog.backend.repos.PostRepository;
 import com.blog.backend.repos.UserRepository;
 import com.blog.backend.services.serviceInterface.PostService;
+import com.blog.backend.utils.ApiResponse;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -43,25 +41,23 @@ public class PostServiceImplementation implements PostService {
 
     //(for future after intern)
     @Override
-    public Post addPost(PostDTO postDTO, Integer userId) {
+    public ResponseEntity<?> addPost(PostDTO postDTO, Integer userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User Not found"));
-        Post post = Post.builder()
-                .postTitle(postDTO.getTitle())
-                .postDescription(postDTO.getContent())
-                .privacy(postDTO.getPrivacy())
+        Post post = Post.builder().postTitle(postDTO.getTitle()).postDescription(postDTO.getContent()).privacy(postDTO.getPrivacy())
                 .imageBase(postDTO.getImage())
                 .createdAt(LocalDateTime.now())
                 .user(user)
                 .build();
-        return postRepository.save(post);
+        ApiResponse apiResponse;
+        apiResponse = new ApiResponse(true, "Post Created Successfully");
+        apiResponse.setData("post", postRepository.save(post));
+        return ResponseEntity.ok().body(apiResponse.getResponse());
+
     }
 
 
-
-
-
     @Override                                       //(userId who share)
-    public Post sharePost(Integer originalPostId, Integer userWhoWantToShare, PostDTO sharePostDTO) {
+    public ResponseEntity<?> sharePost(Integer originalPostId, Integer userWhoWantToShare, PostDTO sharePostDTO) {
         // Find the original post by its ID
         Optional<Post> originalPostOptional = postRepository.findById(originalPostId);
         if (originalPostOptional.isEmpty()) {
@@ -70,9 +66,7 @@ public class PostServiceImplementation implements PostService {
         Post originalPost = originalPostOptional.get();
 
         // Find the user who is sharing the post
-        User user = userRepository.findById(userWhoWantToShare)
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
-
+        User user = userRepository.findById(userWhoWantToShare).orElseThrow(() -> new EntityNotFoundException("User not found"));
 
 
         Post sharedPostReference = originalPost.getSharePost();
@@ -82,23 +76,26 @@ public class PostServiceImplementation implements PostService {
             originalPost = sharedPostReference;
         }
 
-        Post sharedPost = Post.builder()
-                .postTitle(sharePostDTO.getTitle())  //which you are typing it in request body
+        Post sharedPost = Post.builder().postTitle(sharePostDTO.getTitle())  //which you are typing it in request body
                 .postDescription(sharePostDTO.getContent())  //which you are typing it in request body
                 .imageBase(originalPost.getImageBase())  // Use the original post's image
-                .createdAt(LocalDateTime.now())
-                .user(user)  // Set the user id who is sharing the post
+                .createdAt(LocalDateTime.now()).user(user)  // Set the user id who is sharing the post
                 .sharePost(originalPost)  // Set the (modified in title and description) original post being shared
                 .build();
 
-        return postRepository.save(sharedPost);
+        ApiResponse apiResponse;
+        apiResponse = new ApiResponse(true, "Post Shared Successfully");
+        apiResponse.setData("post", postRepository.save(sharedPost));
+        return ResponseEntity.ok().body(apiResponse.getResponse());
     }
 
     @Override
-    public ResponseEntity<String> deletePost(Integer postId) {
+    public ResponseEntity<?> deletePost(Integer postId) {
+        ApiResponse apiResponse;
         Optional<Post> postOptional = postRepository.findById(postId);
         if (postOptional.isEmpty()) {
-            return new ResponseEntity<>("Post ID not found", HttpStatus.BAD_REQUEST);
+            apiResponse = new ApiResponse(false, "Post ID not found");
+            return ResponseEntity.badRequest().body(apiResponse.getResponse());
         } else {
             Post post = postOptional.get();
 
@@ -106,25 +103,28 @@ public class PostServiceImplementation implements PostService {
             if (post.getSharePost() != null) {
                 // It's a shared post, so delete the shared post only
                 postRepository.deleteById(postId);
-                return new ResponseEntity<>("Shared Post Deleted Successfully", HttpStatus.OK);
+                apiResponse = new ApiResponse(true, "Shared Post Deleted Successfully");
             } else {
                 // It's an original post, so delete both the original and shared posts
                 // Find and delete the shared posts that reference the original post
                 List<Post> sharedPosts = postRepository.findBySharePost(post);
+
+
                 postRepository.deleteAll(sharedPosts);
+
 
                 // Delete the original post
                 postRepository.deleteById(postId);
 
-                return new ResponseEntity<>("Original Post and Shared Posts Deleted Successfully", HttpStatus.OK);
+                apiResponse = new ApiResponse(true, "Original Post and Shared Posts Deleted Successfully");
             }
+            return ResponseEntity.ok().body(apiResponse.getResponse());
         }
     }
 
 
-
     @Override
-    public Post updatePost(Integer postId, PostDTO newPostDTO) {
+    public ResponseEntity<?> updatePost(Integer postId, PostDTO newPostDTO) {
         // Find the post by its ID
         Optional<Post> postOptional = postRepository.findById(postId);
         if (postOptional.isEmpty()) {
@@ -132,16 +132,23 @@ public class PostServiceImplementation implements PostService {
         }
 
         Post post = postOptional.get();
-
+        ApiResponse apiResponse;
         // Check if the post is an original post or a shared post
         if (post.getSharePost() != null) {
             // It's a shared post, so update the shared post only
             updateSharedPost(post, newPostDTO);
-            return postRepository.saveAndFlush(post);
+
+            apiResponse = new ApiResponse(true, "Post Updated Successfully");
+            apiResponse.setData("post", postRepository.saveAndFlush(post));
+            return ResponseEntity.ok().body(apiResponse.getResponse());
         } else {
             // It's an original post, so update both the original and shared posts
             updateOriginalPostAndSharedPosts(post, newPostDTO);
-            return postRepository.saveAndFlush(post);
+
+            apiResponse = new ApiResponse(true, "Post Updated Successfully");
+            apiResponse.setData("post", postRepository.saveAndFlush(post));
+            return ResponseEntity.ok().body(apiResponse.getResponse());
+
         }
     }
 
@@ -170,30 +177,38 @@ public class PostServiceImplementation implements PostService {
     }
 
     @Override
-    public Optional<Post> getPostByPostId(Integer postId) {
-        return postRepository.findById(postId);
+    public ResponseEntity<?> getPostByPostId(Integer postId) {
+        ApiResponse apiResponse;
+        apiResponse = new ApiResponse(true, "Post Retrieved Successfully");
+        apiResponse.setData("post", postRepository.findById(postId));
+        return ResponseEntity.ok().body(apiResponse.getResponse());
+
 
     }
 
-    public Page<Post> getAllPostByUserId(Integer visitedId,Integer userId, Pageable pageable) throws GeneralException {
-        if (visitedId.equals(userId)){
-            return postRepository.findAllByUserId(userId, pageable);
-        }else {
-            User user = userRepository.findById(visitedId).orElseThrow(()->new GeneralException(ErrorCode.USER_DOESNT_EXIST,"User does not exist"));
+    public ResponseEntity<?> getAllPostByUserId(Integer visitedId, Integer userId, Pageable pageable) throws GeneralException {
+        ApiResponse apiResponse;
+        if (visitedId.equals(userId)) {
+            apiResponse = new ApiResponse(true, "All posts returned successfully");
+            Page<Post> posts = postRepository.findAllByUserId(userId, pageable);
+            apiResponse.setData("posts", posts);
+            return ResponseEntity.ok().body(apiResponse.getResponse());
+
+        } else {
+            User user = userRepository.findById(visitedId).orElseThrow(() -> new GeneralException(ErrorCode.USER_DOESNT_EXIST, "User does not exist"));
             Set<Friendship> friendships = user.getFriendships1();
-            List<Integer>friendsIds = new ArrayList<>();
+            List<Integer> friendsIds = new ArrayList<>();
             List<Post> allPosts = new ArrayList<>();
             if (!friendships.isEmpty()) {
-                for (Friendship friendship:
-                        friendships) {
+                for (Friendship friendship : friendships) {
                     friendsIds.add(friendship.getFriendId());
                 }
-                if (friendsIds.contains(userId)){
+                if (friendsIds.contains(userId)) {
 
-                    allPosts.addAll(postRepository.findPostsByUserAndPrivacy(user,Privacy.FRIENDS));
+                    allPosts.addAll(postRepository.findPostsByUserAndPrivacy(user, Privacy.FRIENDS));
                 }
             }
-            List<Post> publicPosts = postRepository.findPostsByUserAndPrivacy(user,Privacy.PUBLIC);
+            List<Post> publicPosts = postRepository.findPostsByUserAndPrivacy(user, Privacy.PUBLIC);
             allPosts.addAll(publicPosts);
             setIsReact(userId, allPosts);
             int pageSize = pageable.getPageSize();
@@ -209,38 +224,35 @@ public class PostServiceImplementation implements PostService {
                 pagedAllPosts = allPosts.subList(startItem, toIndex);
             }
 
-            return new PageImpl<>(pagedAllPosts, PageRequest.of(currentPage, pageSize), allPosts.size());
+
+            apiResponse = new ApiResponse(true, "All posts returned successfully");
+            apiResponse.setData("posts", new PageImpl<>(pagedAllPosts, PageRequest.of(currentPage, pageSize), allPosts.size()));
+            return ResponseEntity.ok().body(apiResponse.getResponse());
 
         }
 
     }
 
 
-
     @Override
-    public Page<Post> getAllPosts(Pageable pageable,Integer userId) throws GeneralException {
-        User user = userRepository.findById(userId).orElseThrow(()->new GeneralException(ErrorCode.USER_DOESNT_EXIST,"User does not exist"));
-
+    public ResponseEntity<?> getAllPosts(Pageable pageable, Integer userId) throws GeneralException {
+        User user = userRepository.findById(userId).orElseThrow(() -> new GeneralException(ErrorCode.USER_DOESNT_EXIST, "User does not exist"));
         Set<Friendship> friendships = user.getFriendships1();
-        List<Integer>friendsIds = new ArrayList<>();
+        List<Integer> friendsIds = new ArrayList<>();
         List<Post> allPosts = new ArrayList<>();
         if (!friendships.isEmpty()) {
-            for (Friendship friendship:
-                    friendships) {
+            for (Friendship friendship : friendships) {
                 friendsIds.add(friendship.getFriendId());
             }
-            for (Integer friendId:
-                    friendsIds) {
-                List<Post> posts =postRepository.findAllByUserId(friendId);
-                for (Post post:
-                     posts) {
-                    if (post.getPrivacy().equals(Privacy.FRIENDS)){
+            for (Integer friendId : friendsIds) {
+                List<Post> posts = postRepository.findAllByUserId(friendId);
+                for (Post post : posts) {
+                    if (post.getPrivacy().equals(Privacy.FRIENDS)) {
                         allPosts.add(post);//friends posts
                     }
                 }
             }
         }
-
 
 
         List<Post> publicPosts = postRepository.findPostsByPrivacyIs(Privacy.PUBLIC);
@@ -260,19 +272,19 @@ public class PostServiceImplementation implements PostService {
             int toIndex = Math.min(startItem + pageSize, allPosts.size());
             pagedAllPosts = allPosts.subList(startItem, toIndex);
         }
-
-        return new PageImpl<>(pagedAllPosts, PageRequest.of(currentPage, pageSize), allPosts.size());
+        ApiResponse apiResponse;
+        apiResponse = new ApiResponse(true, "Post Retrieved Successfully");
+        apiResponse.setData("posts", new PageImpl<>(pagedAllPosts, PageRequest.of(currentPage, pageSize), allPosts.size()));
+        return ResponseEntity.ok().body(apiResponse.getResponse());
 
 
     }
 
     private static void setIsReact(Integer userId, List<Post> allPosts) {
-        for (Post post:
-                allPosts) {
+        for (Post post : allPosts) {
             Set<React> reacts = post.getReacts();
-            for (React react:
-                 reacts) {
-                if (react.getUser().getId().equals(userId)){
+            for (React react : reacts) {
+                if (react.getUser().getId().equals(userId)) {
                     post.setIsReact(react.getEmoji().ordinal());
                 }
             }

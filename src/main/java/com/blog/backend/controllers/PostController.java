@@ -23,13 +23,13 @@ public class PostController {
 
     //(done)
     @PostMapping("add-post/{userId}")
-    public Post addPost(@RequestBody PostDTO postDTO , @PathVariable("userId") Integer userId) {
+    public ResponseEntity<?> addPost(@RequestBody PostDTO postDTO , @PathVariable("userId") Integer userId) {
         return postService.addPost(postDTO,userId);
 
     }
 
     @PostMapping("share/{user-who-want-to-share}/{original-post-id}")
-    public Post sharePost(@PathVariable("original-post-id") Integer originalPostId,@PathVariable("user-who-want-to-share") Integer userWhoWantToShare , @RequestBody PostDTO sharePostDTO) {
+    public ResponseEntity<?> sharePost(@PathVariable("original-post-id") Integer originalPostId,@PathVariable("user-who-want-to-share") Integer userWhoWantToShare , @RequestBody PostDTO sharePostDTO) {
         return postService.sharePost(originalPostId, userWhoWantToShare, sharePostDTO);
     }
 
@@ -37,30 +37,30 @@ public class PostController {
 
     
     @DeleteMapping("delete-post/{postId}")
-    public ResponseEntity<String> deletePost(@PathVariable("postId") Integer postId) {
+    public ResponseEntity<?> deletePost(@PathVariable("postId") Integer postId) {
         return postService.deletePost(postId);
     }
 
     
     @PutMapping("update-post/{postId}")
-    public Post updatePost(@PathVariable("postId") Integer postId, @RequestBody PostDTO newPostDTO) {
+    public ResponseEntity<?> updatePost(@PathVariable("postId") Integer postId, @RequestBody PostDTO newPostDTO) {
         return postService.updatePost(postId, newPostDTO);
     }
 
 
     @GetMapping("get/postByPostId/{post-id}")
-    public Optional<Post> getPostByPostId(@PathVariable("post-id") Integer postId) {
+    public ResponseEntity<?> getPostByPostId(@PathVariable("post-id") Integer postId) {
         return postService.getPostByPostId(postId);
     }
 
     @GetMapping("get/postsByUserId/{visitor-id}/{user-id}")
-    public Page<Post> getPostByUserId(@PathVariable("visitor-id") Integer visitorId,@PathVariable("user-id") Integer userId, Pageable pageable) throws GeneralException {
+    public ResponseEntity<?> getPostByUserId(@PathVariable("visitor-id") Integer visitorId,@PathVariable("user-id") Integer userId, Pageable pageable) throws GeneralException {
         return postService.getAllPostByUserId(visitorId, userId, pageable);
     }
 
 
     @GetMapping("all-posts/{user-id}")
-    public Page<Post> getAllPost(Pageable pageable,@PathVariable("user-id") Integer userId) throws GeneralException {
+    public ResponseEntity<?> getAllPost(Pageable pageable,@PathVariable("user-id") Integer userId) throws GeneralException {
         return postService.getAllPosts(pageable,userId);
     }
 
